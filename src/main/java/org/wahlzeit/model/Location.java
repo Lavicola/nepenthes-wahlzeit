@@ -1,26 +1,42 @@
 package org.wahlzeit.model;
 
-/**
- * A Location represents 3 Dimensional space where a photo was taken.
- */
+
 public class Location {
-    public Coordinate coordinate = null;
-
-	/**
-	 * 
-	 * @methodtype constructor
-	 */
-    public Location(){
-
-    }
+    private Coordinate coordinate = null;
 
 	/**
 	 * 
 	 * @methodtype constructor
 	 */
     public Location(Coordinate coordinate){
-        this.coordinate = coordinate;
+        this.coordinate = new Coordinate(coordinate.getX(), coordinate.getY(), coordinate.getZ());
     }
 
+	/**
+	 * 
+	 * @methodtype constructor
+	 */
+    public Location(double x,double y, double z){
+        this.coordinate = new Coordinate(x,y,z);
+    }
+
+    /**
+	 * 
+	 * @methodtype get
+	 */
+    public Coordinate getCoordinate(){
+        return this.coordinate;
+    }
+
+       /**
+	 * 
+	 * @methodtype set
+	 */
+    public void SetCoordinate(Coordinate coordinate){
+        if(coordinate == null){
+            return;
+        }
+        this.coordinate = coordinate;
+    }
 
 }

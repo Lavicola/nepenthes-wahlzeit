@@ -2,7 +2,7 @@ package org.wahlzeit.model;
 
 
 /**
- * The Cooridnate represents x, y and z cartesian coordinates .
+ * Cartesian coordinates .
  */
 public class Coordinate {
     private double x;
