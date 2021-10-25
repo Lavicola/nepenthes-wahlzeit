@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2021 David Schmidt https://github.com/Lavicola
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 package org.wahlzeit.model;
 
 
