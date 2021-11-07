@@ -149,6 +149,10 @@ public class Photo extends DataObject {
 		noVotes = rset.getInt("no_votes");
 
 		creationTime = rset.getLong("creation_time");
+		 // if rset returns 0 it means the location is NULL
+		 if(rset.getInt("location_id") != 0){
+			 return;
+		 }
 
 		maxPhotoSize = PhotoSize.getFromWidthHeight(width, height);
 	}
@@ -171,6 +175,10 @@ public class Photo extends DataObject {
 		rset.updateInt("praise_sum", praiseSum);
 		rset.updateInt("no_votes", noVotes);
 		rset.updateLong("creation_time", creationTime);		
+
+		rset.updateInt("no_votes", noVotes);
+
+
 	}
 
 	/**
@@ -465,4 +473,28 @@ public class Photo extends DataObject {
 		return creationTime;
 	}
 		
+	/**
+	 * 
+	 * @methodtype set
+	 */
+	public void SetLocation(Location location) {
+		/** 
+		* According to the UML of the last week every photo belongs to exactly one Location Instance,
+		* thats why we create a new location instance
+		*/
+		if(location instanceof Location){
+			this.location = new Location(new Coordinate(location.getCoordinate().getX(), location.getCoordinate().getY(), location.getCoordinate().getZ()));
+		}
+		return;
+	}
+
+	 /**
+	 * 
+	 * @methodtype get
+	 */
+	public Location getLocation() {
+		return this.location;
+	}
+
+
 }

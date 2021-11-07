@@ -7,7 +7,7 @@ package org.wahlzeit.model;
 
 
 public class Location {
-    protected Coordinate coordinate = null;
+    private Coordinate coordinate = null;
 
 	/**
 	 * 
@@ -24,4 +24,13 @@ public class Location {
     public Location(double x,double y, double z){
         this.coordinate = new Coordinate(x,y,z);
     }
+
+	/**
+	 * 
+	 * @methodtype constructor
+	 */
+    public Coordinate getCoordinate(){
+        return this.coordinate;
+    }
+
 }
