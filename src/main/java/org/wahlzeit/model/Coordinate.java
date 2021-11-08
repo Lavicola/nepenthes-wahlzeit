@@ -10,10 +10,10 @@ package org.wahlzeit.model;
  * Cartesian coordinates .
  */
 public class Coordinate {
-    private double x;
-    private double y;
-    private double z;
-
+    //immutable since it does not make sense to change the coordiantes later on.
+    private final double x;
+    private final double y;
+    private final double z;
 
 	/**
 	 * 
@@ -54,6 +54,11 @@ public Coordinate(double x,double y, double z){
        Formular: root( (x2 - x1)² + (y2 - y1)² + (z2 - z1)² )
     */
      public double getDistance(Coordinate coordinate) {
+        // exception handling was not yet asked so we just return the biggest negative number
+        if(coordinate == null){
+            throw new IllegalArgumentException("The Arguement can´t be null.");
+        }
+
 		double x_delta = Math.pow(coordinate.getX() - this.getX(), 2);
 		double y_delta = Math.pow(coordinate.getY() - this.getY(),2);
 		double z_delta = Math.pow(coordinate.getZ() - this.getZ(),2);
@@ -61,13 +66,19 @@ public Coordinate(double x,double y, double z){
 		return Math.sqrt(x_delta + y_delta + z_delta);
 	}
 
-    public boolean equals(Coordinate coordinate){
-        return isEqual(coordinate);
+    @Override
+    public boolean equals(Object o){
+        if(o != null && o.getClass() == this.getClass() ){
+            return this.isEqual((Coordinate) o);
+        }else{
+            throw new IllegalArgumentException();
+        }
+        
     }
 
     /**
 	 * Check if two Coordinates are equal. 
-     * Equal means both points are exactly(!) the same!
+     * Equal means both points are exactly(!) the same
      * That means (1.0,1.0,1.0000001) != (1.0,1.0,1.0000001) 
 	 */
     public boolean isEqual(Coordinate coordinate){

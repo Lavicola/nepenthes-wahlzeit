@@ -5,7 +5,7 @@
 
 package org.wahlzeit.model;
 
-
+// We don´t implement a setter since it does not make sense to change the coordiantes of a location later on.
 public class Location {
     private Coordinate coordinate = null;
 
@@ -32,5 +32,20 @@ public class Location {
     public Coordinate getCoordinate(){
         return this.coordinate;
     }
+
+	/**
+	 * forward equals to coordinate equals in order to check if both locations have the same coordinates. 
+	 */
+	//
+    @Override
+    public boolean equals(Object o){
+        if(o != null && o.getClass() == this.getClass() ){
+			Location temp = (Location) o;
+            return this.coordinate.isEqual(temp.getCoordinate());
+        }else{
+            throw new IllegalArgumentException();
+        }
+    }
+
 
 }

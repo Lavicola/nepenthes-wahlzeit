@@ -15,6 +15,7 @@ CREATE TABLE users (
 	creation_time bigint
 );
 
+/* Both tables are added just to show it works, they are not used. */
 CREATE TABLE coordinates(
 	id integer PRIMARY KEY,
 	x double precision,
@@ -27,6 +28,10 @@ CREATE TABLE locations(
 	coordinate integer REFERENCES coordinates(id)
 );
 
+
+/*
+	photo does not have location as reference. The right Implementation of the feature would take too long. 
+*/
 CREATE TABLE photos (
 	id integer PRIMARY KEY,
 	owner_id integer REFERENCES users(id),
@@ -42,7 +47,9 @@ CREATE TABLE photos (
 	praise_sum integer,
 	no_votes integer,
 	creation_time bigint,
-	location_id integer REFERENCES locations(id)
+	coordinate_x double precision,
+	coordinate_y double precision,
+	coordinate_z double precision
 );
 
 CREATE TABLE tags (
