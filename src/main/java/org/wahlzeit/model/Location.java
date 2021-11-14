@@ -5,6 +5,11 @@
 
 package org.wahlzeit.model;
 
+import java.sql.SQLException;
+
+
+import java.sql.ResultSet;
+
 // We don´t implement a setter since it does not make sense to change the coordiantes of a location later on.
 public class Location {
     private Coordinate coordinate = null;
@@ -33,6 +38,21 @@ public class Location {
         return this.coordinate;
     }
 
+
+	public void writeOn(ResultSet rset) throws SQLException {
+            coordinate.writeOn(rset);
+    }
+
+	public Location readFrom(ResultSet rset) throws SQLException {
+        Coordinate coordinate = this.coordinate.readFrom(rset);
+        if(coordinate == null){
+            return null;
+        }else{
+            return new Location(coordinate);
+        }
+        
+    }
+    
 	/**
 	 * forward equals to coordinate equals in order to check if both locations have the same coordinates. 
 	 */

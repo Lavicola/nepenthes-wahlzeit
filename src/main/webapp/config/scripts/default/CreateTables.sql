@@ -15,20 +15,6 @@ CREATE TABLE users (
 	creation_time bigint
 );
 
-/* Both tables are added just to show it works, they are not used. */
-CREATE TABLE coordinates(
-	id integer PRIMARY KEY,
-	x double precision,
-	y double precision,
-	z double precision
-);
-
-CREATE TABLE locations(
-	id integer PRIMARY KEY,
-	coordinate integer REFERENCES coordinates(id)
-);
-
-
 /*
 	photo does not have location as reference. The right Implementation of the feature would take too long. 
 */

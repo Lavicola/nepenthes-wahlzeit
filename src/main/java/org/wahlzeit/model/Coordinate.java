@@ -5,6 +5,9 @@
 
 package org.wahlzeit.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 /**
  * Cartesian coordinates .
@@ -66,6 +69,19 @@ public Coordinate(double x,double y, double z){
 		return Math.sqrt(x_delta + y_delta + z_delta);
 	}
 
+	public void writeOn(ResultSet rset) throws SQLException {
+        rset.updateDouble("coordinate_x", this.getX());
+        rset.updateDouble("coordinate_y", this.getY());
+        rset.updateDouble("coordinate_z", this.getZ());
+    }
+
+	public Coordinate readFrom(ResultSet rset) throws SQLException {
+        double x = rset.getDouble("x_coordiante");
+        if(!rset.wasNull()){
+            return new Coordinate(x, rset.getDouble("y_coordiante"), rset.getDouble("z_coordiante"));
+        }
+        return null;
+    }
     @Override
     public boolean equals(Object o){
         if(o != null && o.getClass() == this.getClass() ){

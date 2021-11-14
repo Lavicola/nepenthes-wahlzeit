@@ -149,11 +149,9 @@ public class Photo extends DataObject {
 		noVotes = rset.getInt("no_votes");
 
 		creationTime = rset.getLong("creation_time");
-		double x = rset.getDouble("x_coordiante");
-		if(!rset.wasNull()){
-		location = new Location(new Coordinate(x, rset.getDouble("y_coordiante"), rset.getDouble("z_coordiante")));
-		}
 		maxPhotoSize = PhotoSize.getFromWidthHeight(width, height);
+		location = location.readFrom(rset);
+
 	}
 	
 	/**
@@ -175,10 +173,8 @@ public class Photo extends DataObject {
 		rset.updateInt("no_votes", noVotes);
 		rset.updateLong("creation_time", creationTime);		
 		rset.updateInt("no_votes", noVotes);
-		if(location != null){
-			rset.updateDouble("coordinate_x", location.getCoordinate().getX());
-			rset.updateDouble("coordinate_y", location.getCoordinate().getY());
-			rset.updateDouble("coordinate_z", location.getCoordinate().getZ());
+		if(location == null){
+			location.writeOn(rset);
 		}
 	}
 
