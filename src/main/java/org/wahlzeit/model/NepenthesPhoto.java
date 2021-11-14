@@ -9,25 +9,39 @@ public class NepenthesPhoto extends Photo {
     private int altitude;
     private boolean isHybrid;
 
-	/**
+
+    	/**
 	 * 
 	 */
 	public NepenthesPhoto() {
-		id = PhotoId.getNextId();
-		incWriteCount();
+        super();
 	}
-
+	
 	/**
+	 * 
+	 * @methodtype constructor
+	 */
+	public NepenthesPhoto(PhotoId myId) {
+		super(myId);
+	}
+	
+    	/**
 	 * 
 	 * @methodtype constructor
 	 */
 	public NepenthesPhoto(ResultSet rset) throws SQLException {
 		super.readFrom(rset);
         /*
-        name = rset.getString("name");
-        altitude = rset.getInt("altitude");
-        isHybrid = rset.getBoolean("isHybrid");
+        readFrom(rset);
         */
+	}
+
+	/**
+	 * 
+	 * @methodtype constructor
+	 */
+	public NepenthesPhoto(ResultSet rset,Location location) throws SQLException {
+		super(rset,location);
 	}
 
     public void readFrom(ResultSet rset) throws SQLException {

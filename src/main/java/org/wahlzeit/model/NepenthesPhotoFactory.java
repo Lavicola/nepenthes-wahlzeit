@@ -9,6 +9,13 @@ public class NepenthesPhotoFactory extends PhotoFactory {
 
     private static NepenthesPhotoFactory instance = null;
 
+	/**
+	 * 
+	 */
+	protected NepenthesPhotoFactory() {
+		// do nothing
+	}
+
     /**
 	 * Public singleton access method.
 	 */
@@ -39,7 +46,7 @@ public class NepenthesPhotoFactory extends PhotoFactory {
 	 * 
 	 */
 	public Photo createPhoto(PhotoId id) {
-		return new Photo(id);
+		return new NepenthesPhoto(id);
 	}
 	
 	/**
@@ -49,12 +56,6 @@ public class NepenthesPhotoFactory extends PhotoFactory {
 		return new NepenthesPhoto(rs);
 	}
 	
-	/**
-	 * 
-	 */
-	public PhotoTagCollector createPhotoTagCollector() {
-		return new PhotoTagCollector();
-	}
 
     
 }
