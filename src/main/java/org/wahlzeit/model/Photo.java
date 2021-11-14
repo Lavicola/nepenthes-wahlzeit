@@ -119,6 +119,15 @@ public class Photo extends DataObject {
 
 	/**
 	 * 
+	 * @methodtype constructor
+	 */
+	public Photo(ResultSet rset,Location location) throws SQLException {
+		this.location = location;
+		readFrom(rset);
+	}
+
+	/**
+	 * 
 	 * @methodtype get
 	 */
 	public String getIdAsString() {
@@ -150,8 +159,9 @@ public class Photo extends DataObject {
 
 		creationTime = rset.getLong("creation_time");
 		maxPhotoSize = PhotoSize.getFromWidthHeight(width, height);
-		location = location.readFrom(rset);
-
+		if(location != null){
+			location = location.readFrom(rset);
+		}
 	}
 	
 	/**
@@ -172,8 +182,7 @@ public class Photo extends DataObject {
 		rset.updateInt("praise_sum", praiseSum);
 		rset.updateInt("no_votes", noVotes);
 		rset.updateLong("creation_time", creationTime);		
-		rset.updateInt("no_votes", noVotes);
-		if(location == null){
+		if(location != null){
 			location.writeOn(rset);
 		}
 	}

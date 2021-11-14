@@ -76,9 +76,9 @@ public Coordinate(double x,double y, double z){
     }
 
 	public Coordinate readFrom(ResultSet rset) throws SQLException {
-        double x = rset.getDouble("x_coordiante");
+        double x = rset.getDouble("coordinate_x");
         if(!rset.wasNull()){
-            return new Coordinate(x, rset.getDouble("y_coordiante"), rset.getDouble("z_coordiante"));
+            return new Coordinate(x, rset.getDouble("coordinate_y"), rset.getDouble("coordinate_z"));
         }
         return null;
     }

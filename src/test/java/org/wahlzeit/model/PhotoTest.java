@@ -45,6 +45,10 @@ public class PhotoTest {
             Mockito.when(resultSet.getInt("praise_sum")).thenReturn(1);
             Mockito.when(resultSet.getInt("no_votes")).thenReturn(1);
             Mockito.when(resultSet.getLong("creation_time")).thenReturn((long)55);
+            Mockito.when(resultSet.getDouble("coordinate_x")).thenReturn(5.0);
+            Mockito.when(resultSet.getDouble("coordinate_y")).thenReturn(5.0);
+            Mockito.when(resultSet.getDouble("coordinate_z")).thenReturn(5.0);
+
                 } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,27 +69,34 @@ public class PhotoTest {
             assertEquals(new Tags("test"), photo.getTags());
             assertEquals(PhotoStatus.getFromInt(1), photo.getStatus());
             assertEquals((long)55, photo.getCreationTime());
+
         }
 
+        // test creating a photo with location and without location
         @Test
         public void testWriteOn() throws SQLException {
-            final Photo photo = new Photo(resultSet);
+            final Photo photo = new Photo(resultSet,location);
+            final Photo photo2 = new Photo(resultSet);
+
             photo.writeOn(resultSet);
-            verify(resultSet, times(1)).updateInt(eq("owner_id"), anyInt());
-            verify(resultSet, times(1)).updateString(eq("owner_name"), anyString());
-            verify(resultSet, times(1)).updateBoolean(eq("owner_notify_about_praise"), anyBoolean());
-            verify(resultSet, times(1)).updateString(eq("owner_email_address"), anyString());
-            verify(resultSet, times(1)).updateInt(eq("owner_language"), anyInt());
-            verify(resultSet, times(1)).updateString(eq("owner_home_page"), anyString());
-            verify(resultSet, times(1)).updateInt(eq("width"), anyInt());
-            verify(resultSet, times(1)).updateInt(eq("height"), anyInt());
-            verify(resultSet, times(1)).updateString(eq("tags"), anyString());
-            verify(resultSet, times(1)).updateInt(eq("status"), anyInt());
-            verify(resultSet, times(1)).updateInt(eq("praise_sum"), anyInt());
-            verify(resultSet, times(1)).updateLong(eq("creation_time"), anyLong());
+            photo2.writeOn(resultSet);
+            // both should be called twice one for with location and one for without location
+            verify(resultSet, times(2)).updateInt(eq("owner_id"), anyInt());
+            verify(resultSet, times(2)).updateString(eq("owner_name"), anyString());
+            verify(resultSet, times(2)).updateBoolean(eq("owner_notify_about_praise"), anyBoolean());
+            verify(resultSet, times(2)).updateString(eq("owner_email_address"), anyString());
+            verify(resultSet, times(2)).updateInt(eq("owner_language"), anyInt());
+            verify(resultSet, times(2)).updateString(eq("owner_home_page"), anyString());
+            verify(resultSet, times(2)).updateInt(eq("width"), anyInt());
+            verify(resultSet, times(2)).updateInt(eq("height"), anyInt());
+            verify(resultSet, times(2)).updateString(eq("tags"), anyString());
+            verify(resultSet, times(2)).updateInt(eq("status"), anyInt());
+            verify(resultSet, times(2)).updateInt(eq("praise_sum"), anyInt());           
+            verify(resultSet, times(2)).updateInt(eq("no_votes"), anyInt());           
+            verify(resultSet, times(2)).updateLong(eq("creation_time"), anyLong());
             verify(resultSet, times(1)).updateDouble(eq("coordinate_x"), anyDouble());
             verify(resultSet, times(1)).updateDouble(eq("coordinate_y"), anyDouble());
-            verify(resultSet, times(1)).updateDouble(eq("coordinate_z"), anyDouble());
+            verify(resultSet, times(1)).updateDouble(eq("coordinate_z"), anyDouble());   
         }
 
         
