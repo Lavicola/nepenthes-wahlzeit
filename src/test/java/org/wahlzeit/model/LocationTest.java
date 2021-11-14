@@ -1,5 +1,6 @@
 package org.wahlzeit.model;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,13 @@ public void testEquals() {
     assertEquals(false, locationNegative.equals(new Location(new Coordinate(1.0, 2.0, 3.0))));
 
 }
+@Test
+public void testHashCode(){
+    Location location = new Location(new Coordinate(0.0, 0.0, 0.0));
+    assertEquals(location.hashCode(),location0.hashCode());
+    assertNotEquals(location.hashCode(),location1.hashCode());
+}
+
 
 @Test(expected = IllegalArgumentException.class)
 public void testNullArgument() {

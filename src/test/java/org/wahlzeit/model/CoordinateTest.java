@@ -1,5 +1,6 @@
 package org.wahlzeit.model;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -85,7 +86,12 @@ public void testEquals() {
     
 }
 
-
+@Test
+public void testHashCode(){
+    Coordinate coordinate = new Coordinate(0.0, 0.0, 0.0);
+    assertEquals(coordinate.hashCode(),coordinate0.hashCode());
+    assertNotEquals(coordinate.hashCode(),coordinate1.hashCode());
+}
 
 @Test(expected = IllegalArgumentException.class)
 public void testNullArgument() {

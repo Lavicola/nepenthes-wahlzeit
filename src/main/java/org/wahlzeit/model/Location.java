@@ -65,5 +65,10 @@ public class Location {
             throw new IllegalArgumentException();
         }
     }
+    @Override
+    public int hashCode() {
+        return coordinate.hashCode();
+    }
+
     
 }
