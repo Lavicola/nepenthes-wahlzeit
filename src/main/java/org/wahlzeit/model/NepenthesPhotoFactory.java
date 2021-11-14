@@ -38,21 +38,21 @@ public class NepenthesPhotoFactory extends PhotoFactory {
 	/**
 	 * @methodtype factory
 	 */
-	public Photo createPhoto() {
+	public NepenthesPhoto createPhoto() {
 		return new NepenthesPhoto();
 	}
 
 	/**
 	 * 
 	 */
-	public Photo createPhoto(PhotoId id) {
+	public NepenthesPhoto createPhoto(PhotoId id) {
 		return new NepenthesPhoto(id);
 	}
 	
 	/**
 	 * 
 	 */
-	public Photo createPhoto(ResultSet rs) throws SQLException {
+	public NepenthesPhoto createPhoto(ResultSet rs) throws SQLException {
 		return new NepenthesPhoto(rs);
 	}
 	
