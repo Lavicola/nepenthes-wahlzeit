@@ -57,9 +57,8 @@ public class PhotoTest {
         @Test
         public void testReadFrom() throws SQLException {
             final Photo photo = new Photo(resultSet);
-            assertEquals("admin", photo.getOwnerName());
             assertEquals(1, photo.getOwnerId());
-            assertEquals("admin", photo.getOwnerName());
+            assertEquals(1, photo.getOwnerId());
             assertFalse(photo.getOwnerNotifyAboutPraise());
             assertEquals(photo.ownerEmailAddress, photo.getOwnerEmailAddress());
             assertEquals(Language.ENGLISH, photo.getOwnerLanguage());
