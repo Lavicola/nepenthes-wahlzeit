@@ -6,8 +6,7 @@
 package org.wahlzeit.model;
 
 import java.sql.SQLException;
-
-
+import java.util.Objects;
 import java.sql.ResultSet;
 
 // We don´t implement a setter since it does not make sense to change the coordiantes of a location later on.
@@ -66,6 +65,5 @@ public class Location {
             throw new IllegalArgumentException();
         }
     }
-
-
+    
 }

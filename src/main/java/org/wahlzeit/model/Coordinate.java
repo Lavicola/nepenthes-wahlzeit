@@ -7,6 +7,7 @@ package org.wahlzeit.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 
 /**
@@ -17,6 +18,8 @@ public class Coordinate {
     private final double x;
     private final double y;
     private final double z;
+    public final static double EPSILON = 1e-12;
+
 
 	/**
 	 * 
@@ -98,15 +101,24 @@ public Coordinate(double x,double y, double z){
      * That means (1.0,1.0,1.0000001) != (1.0,1.0,1.0000001) 
 	 */
     public boolean isEqual(Coordinate coordinate){
-        double x_delta = coordinate.getX() - this.getX();
-        double y_delta = coordinate.getY() - this.getY();
-        double z_delta = coordinate.getZ() - this.getZ();
+        boolean isXEqual = checkEqualDouble(coordinate.getX(), this.getX());
+        boolean isYEqual = checkEqualDouble(coordinate.getY(), this.getY());
+        boolean isZEqual = checkEqualDouble(coordinate.getZ(), this.getZ());
 
-        //Only if the delta value of all points are 0 they are truly equal!
-        if(x_delta == 0 && y_delta == 0 && z_delta == 0){
+        if(isXEqual && isYEqual && isZEqual){
             return true;
         }
         return false;
+    }
+
+    private boolean checkEqualDouble(double d1, double d2) {
+        return EPSILON > Math.abs(d1-d2);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 
 }

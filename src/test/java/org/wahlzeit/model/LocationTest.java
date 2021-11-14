@@ -11,8 +11,6 @@ public class LocationTest {
 	private Location locationNegative;
     private Location locationNegative2;
 
-    private static double delta = 0;
-
     @Before
 	public void setUp() {
 		location0 = new Location(new Coordinate(0.0, 0.0, 0.0));
