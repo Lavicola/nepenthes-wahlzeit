@@ -14,30 +14,30 @@ public class LocationTest {
 
     @Before
 	public void setUp() {
-		location0 = new Location(new Coordinate(0.0, 0.0, 0.0));
-		location1 = new Location(new Coordinate(1.0, 1.0, 1.0));
+		location0 = new Location(new CartesianCoordinates(0.0, 0.0, 0.0));
+		location1 = new Location(new CartesianCoordinates(1.0, 1.0, 1.0));
 
-        locationNegative = new Location(new Coordinate(-1.0, -2.0, -3.0));
-        locationNegative2 = new Location(new Coordinate(-2.0, -2.0, -3.0));
+        locationNegative = new Location(new CartesianCoordinates(-1.0, -2.0, -3.0));
+        locationNegative2 = new Location(new CartesianCoordinates(-2.0, -2.0, -3.0));
 
 }
 /**
- * The test is essentially the same as in CoordinateTest.
+ * The test is essentially the same as in CartesianCoordinatesTest.
  */
 @Test
 public void testEquals() {
-    assertEquals(true, location1.equals(new Location(new Coordinate(1.0,1.0,1.0))));
+    assertEquals(true, location1.equals(new Location(new CartesianCoordinates(1.0,1.0,1.0))));
     assertEquals(false,location1.equals(location0));
     
-    assertEquals(true, locationNegative.equals(new Location(new Coordinate(-1.0, -2.0, -3.0))));
+    assertEquals(true, locationNegative.equals(new Location(new CartesianCoordinates(-1.0, -2.0, -3.0))));
     assertEquals(false, locationNegative.equals(locationNegative2));
 
-    assertEquals(false, locationNegative.equals(new Location(new Coordinate(1.0, 2.0, 3.0))));
+    assertEquals(false, locationNegative.equals(new Location(new CartesianCoordinates(1.0, 2.0, 3.0))));
 
 }
 @Test
 public void testHashCode(){
-    Location location = new Location(new Coordinate(0.0, 0.0, 0.0));
+    Location location = new Location(new CartesianCoordinates(0.0, 0.0, 0.0));
     assertEquals(location.hashCode(),location0.hashCode());
     assertNotEquals(location.hashCode(),location1.hashCode());
 }
