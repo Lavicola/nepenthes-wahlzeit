@@ -2,6 +2,7 @@ package org.wahlzeit.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class SphericCoordinate implements Coordinate {
 
@@ -10,6 +11,7 @@ public class SphericCoordinate implements Coordinate {
     protected double radius;
 
     public SphericCoordinate(double radius, double theta, double phi) {
+        // The Angle Unit is in Radian
         this.phi = phi;
         this.theta = theta;
         this.radius = radius;
@@ -64,6 +66,7 @@ public class SphericCoordinate implements Coordinate {
     }
 
 
+    // equals forwards to isEqual and then to the CartesianCoordinate isEqual function.
     @Override
     public boolean equals(Object o) {
         assertNotNull(o);
@@ -75,12 +78,18 @@ public class SphericCoordinate implements Coordinate {
 
     }
 
+    // Since we forward equals to the CartesianCoordinate we will also forward the hashCode call
+    @Override
+    public int hashCode() {
+        return this.asCartesianCoordinate().hashCode();
+    }
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
         return this.asCartesianCoordinate().isEqual(coordinate.asCartesianCoordinate());
     }
 
+    // the Database stores the values in Cartesian format therefore we call it via the CartesianCoordiante and later on convert it to asSphericCoordinate
     @Override
     public Coordinate readFrom(ResultSet resultSet) throws SQLException {
         return this.asCartesianCoordinate().readFrom(resultSet).asSphericCoordinate();

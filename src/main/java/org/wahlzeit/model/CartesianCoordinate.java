@@ -125,6 +125,7 @@ public class CartesianCoordinate implements Coordinate {
 
     @Override
     public SphericCoordinate asSphericCoordinate() {
+        // The Angle Unit is in Radian
         double radius = Math.sqrt(Math.pow(x, 2) +
                 Math.pow(y, 2) +
                 Math.pow(z, 2));

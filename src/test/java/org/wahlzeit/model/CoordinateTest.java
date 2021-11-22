@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoordinateTest {
+    // SphericCoordinate Angels are in Radian
     private SphericCoordinate sphericCoordinates0;
     private SphericCoordinate sphericCoordinates1;
     private SphericCoordinate sphericCoordinates2;

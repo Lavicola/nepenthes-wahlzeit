@@ -20,7 +20,7 @@ public class PhotoManager extends ObjectManager {
 	/**
 	 * 
 	 */
-	protected static final PhotoManager instance = new NepenthesPhotoManager();
+	protected static PhotoManager instance = NepenthesPhotoManager.getInstance();
 
 	/**
 	 * In-memory cache for photos
@@ -35,7 +35,7 @@ public class PhotoManager extends ObjectManager {
 	/**
 	 * 
 	 */
-	public static final PhotoManager getInstance() {
+	public static PhotoManager getInstance() {
 		return instance;
 	}
 	

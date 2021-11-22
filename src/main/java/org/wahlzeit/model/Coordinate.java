@@ -15,6 +15,11 @@ public interface Coordinate {
 
     boolean isEqual(Coordinate coordinate);
 
+    /**
+     * Adding readFrom and writeOn here makes it possible to from SphericCoordinate as well
+     * But in the database only the Cartesian values will be stored.
+     * That means in the readFrom Method the Coordiantes will be Converted to the corresponding class
+     */
      Coordinate readFrom(ResultSet resultSet) throws SQLException;
 
      void writeOn(ResultSet resultSet) throws SQLException;
