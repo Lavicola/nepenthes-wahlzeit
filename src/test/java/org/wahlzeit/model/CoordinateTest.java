@@ -57,10 +57,6 @@ public class CoordinateTest {
     //this test checks  both: if equal and if the transformation from spheric -> cartesian works
     @Test
     public void sphericCoordinatesToCartesianCoordinatesTest() {
-        CartesianCoordinate cart = new CartesianCoordinate(10, -11, 12);
-        SphericCoordinate spher = cart.asSphericCoordinate();
-
-
         assertEquals(true, cartesianCoordinate0.equals(sphericCoordinates0));
         assertEquals(false, cartesianCoordinate1.equals(sphericCoordinates0));
         assertEquals(true, cartesianCoordinate2.equals(sphericCoordinates2));

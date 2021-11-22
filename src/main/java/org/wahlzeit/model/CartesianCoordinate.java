@@ -142,15 +142,18 @@ public class CartesianCoordinate implements Coordinate {
 
     //helper function which return Phi for a given x and y
     public double CalculatePhi(double x, double y) {
-        double phi;
+        double phi = 0;
 
-        if (x > 0) {
+        if (x > 0 && y>=0) {
             phi = Math.atan((y / x));
-        } else if (x < 0) {
-            phi = Math.atan((y / x)) + Math.PI;
-        } else {
-            phi = Math.PI / 2;
         }
+        if(x > 0 && y < 0){
+            phi = Math.atan((y / x)) + 2 * Math.PI;
+        }
+        if(x < 0 ){
+            phi = Math.atan((y / x)) + Math.PI;
+        }
+
         return phi;
     }
 
