@@ -132,7 +132,7 @@ public class CartesianCoordinate implements Coordinate {
                 Math.pow(y, 2) +
                 Math.pow(z, 2));
         if (radius == 0) {
-            return new SphericCoordinate(0, 0, 0);
+            throw new IllegalArgumentException("There is no SphericCoordiante since the radius is 0");
         }
         double theta = Math.acos(z / radius);
         double phi = CalculatePhi(x, y);
@@ -143,6 +143,9 @@ public class CartesianCoordinate implements Coordinate {
     //helper function which return Phi for a given x and y
     public double CalculatePhi(double x, double y) {
         double phi = 0;
+        if(x == 0){
+            throw new IllegalArgumentException("There is no valid Coordiante if x is 0");
+        }
 
         if (x > 0 && y>=0) {
             phi = Math.atan((y / x));
