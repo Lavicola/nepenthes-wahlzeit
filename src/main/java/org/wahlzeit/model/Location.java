@@ -8,16 +8,15 @@ package org.wahlzeit.model;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-// We don´t implement a setter since it does not make sense to change the coordiantes of a location later on.
 public class Location {
-    private CartesianCoordinates cartesianCoordinates = null;
+    private CartesianCoordinate cartesianCoordinate = null;
 
 	/**
 	 * 
 	 * @methodtype constructor
 	 */
-    public Location(CartesianCoordinates cartesianCoordinates){
-        this.cartesianCoordinates = new CartesianCoordinates(cartesianCoordinates.getX(), cartesianCoordinates.getY(), cartesianCoordinates.getZ());
+    public Location(CartesianCoordinate cartesianCoordinate){
+        this.cartesianCoordinate = new CartesianCoordinate(cartesianCoordinate.getX(), cartesianCoordinate.getY(), cartesianCoordinate.getZ());
     }
 
 	/**
@@ -25,28 +24,28 @@ public class Location {
 	 * @methodtype constructor
 	 */
     public Location(double x,double y, double z){
-        this.cartesianCoordinates = new CartesianCoordinates(x,y,z);
+        this.cartesianCoordinate = new CartesianCoordinate(x,y,z);
     }
 
 	/**
 	 * 
 	 * @methodtype constructor
 	 */
-    public CartesianCoordinates getCoordinate(){
-        return this.cartesianCoordinates;
+    public CartesianCoordinate getCoordinate(){
+        return this.cartesianCoordinate;
     }
 
 
 	public void writeOn(ResultSet rset) throws SQLException {
-            cartesianCoordinates.writeOn(rset);
+            cartesianCoordinate.writeOn(rset);
     }
 
 	public Location readFrom(ResultSet rset) throws SQLException {
-        CartesianCoordinates cartesianCoordinates = this.cartesianCoordinates.readFrom(rset);
-        if(cartesianCoordinates == null){
+        Coordinate cartesianCoordinate = this.cartesianCoordinate.readFrom(rset);
+        if(cartesianCoordinate == null){
             return null;
         }else{
-            return new Location(cartesianCoordinates);
+            return new Location(cartesianCoordinate.asCartesianCoordinate());
         }
         
     }
@@ -59,14 +58,14 @@ public class Location {
     public boolean equals(Object o){
         if(o != null && o.getClass() == this.getClass() ){
 			Location temp = (Location) o;
-            return this.cartesianCoordinates.isEqual(temp.getCoordinate());
+            return this.cartesianCoordinate.isEqual(temp.getCoordinate());
         }else{
             throw new IllegalArgumentException();
         }
     }
     @Override
     public int hashCode() {
-        return cartesianCoordinates.hashCode();
+        return cartesianCoordinate.hashCode();
     }
 
     

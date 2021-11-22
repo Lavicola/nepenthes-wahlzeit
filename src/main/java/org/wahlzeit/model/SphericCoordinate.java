@@ -1,12 +1,15 @@
 package org.wahlzeit.model;
 
-public class SphericCoordinate implements Coordiante {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class SphericCoordinate implements Coordinate {
 
     protected double phi;
     protected double theta;
     protected double radius;
 
-    public SphericCoordinate(double phi, double theta, double radius) {
+    public SphericCoordinate(double radius, double theta, double phi) {
         this.phi = phi;
         this.theta = theta;
         this.radius = radius;
@@ -14,17 +17,18 @@ public class SphericCoordinate implements Coordiante {
 
 
     @Override
-    public CartesianCoordinates asCartesianCoordinate() {
-        double x,y,z;
-        x = radius * Math.sin(theta) * Math.cos(phi);
-        y = radius * Math.sin(theta) * Math.sin(phi);
-        z = radius * Math.cos(theta);
-        return new CartesianCoordinates(x,y,z);
+    public CartesianCoordinate asCartesianCoordinate() {
+        double x, y, z;
+        x = radius * Math.sin(phi) * Math.cos(theta);
+        y = radius * Math.sin(phi) * Math.sin(theta);
+        z = radius * Math.cos(phi);
+        return new CartesianCoordinate(x, y, z);
     }
-//ϕ phi    || θ teta
+
+    //ϕ phi    || θ teta
     @Override
-    public double getCartesianDistance(Coordiante coordiante) {
-        return this.asCartesianCoordinate().getCartesianDistance(coordiante.asCartesianCoordinate());
+    public double getCartesianDistance(Coordinate coordinate) {
+        return this.asCartesianCoordinate().getCartesianDistance(coordinate.asCartesianCoordinate());
     }
 
     @Override
@@ -33,34 +37,59 @@ public class SphericCoordinate implements Coordiante {
     }
 
     @Override
-    public double getCentralAngle(Coordiante coordinate) {
-        CartesianCoordinates coordiantes1 = this.asCartesianCoordinate();
-        CartesianCoordinates coordinates2 = coordinate.asCartesianCoordinate();
-        double vector = coordiantes1.getX()*coordinates2.getX() + coordiantes1.getY()*coordinates2.getY() + coordiantes1.getZ()*coordinates2.getZ();
-        double absolute1 = getAbsoluteValue(coordiantes1);
-        double absolute2 = getAbsoluteValue(coordinates2);
-        if(absolute1 == 0 || absolute2 == 0){
-            //throw new Exception("angle undefined");
-            return 0;
-        }
-        double angle = Math.acos((vector)/(absolute1*absolute2));
-        return angle;
+    public double getCentralAngle(Coordinate coordinate) {
+        assertNotNull(coordinate);
+        return calculateCentralAngle(coordinate.asSphericCoordinate());
     }
 
-    //helper function
-    private double getAbsoluteValue(Coordiante coordinate){
-        CartesianCoordinates coordinates = coordinate.asCartesianCoordinate();
-        double absolute_v = Math.sqrt(Math.pow(coordinates.getX(),2) +
-                Math.pow(coordinates.getY(),2) +
-                Math.pow(coordinates.getZ(),2));
-        return absolute_v;
-    }
+    private double calculateCentralAngle(SphericCoordinate c) {
+        //calculated using https://wikimedia.org/api/rest_v1/media/math/render/svg/87cea288a5b6e80757bc81375c3b6a38a30a5184 formular
+        double phi1 = this.getPhi();
+        double phi2 = c.getPhi();
+        double theta1 = this.getTheta();
+        double thehta2 = c.getTheta();
+        double phi_delta = phi1 - phi2;
+        double theta_delta = theta1 - thehta2;
+        double first_term = Math.pow(
+                Math.cos(phi2) * Math.sin(theta_delta),
+                2);
+        double second_term = Math.pow(
+                Math.cos(phi1) * Math.sin(phi2)
+                        - (Math.sin(phi1) * Math.cos(phi2) * Math.cos(theta_delta))
+                , 2);
+        double third_term = Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(theta_delta);
 
+        return Math.atan((Math.sqrt(first_term + second_term)) / third_term);
+
+    }
 
 
     @Override
-    public boolean isEqual(Coordiante coordiante) {
-        return this.asCartesianCoordinate().isEqual(coordiante.asCartesianCoordinate());
+    public boolean equals(Object o) {
+        assertNotNull(o);
+        if (o instanceof Coordinate) {
+            return this.isEqual((Coordinate) o);
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+
+    @Override
+    public boolean isEqual(Coordinate coordinate) {
+        return this.asCartesianCoordinate().isEqual(coordinate.asCartesianCoordinate());
+    }
+
+    @Override
+    public Coordinate readFrom(ResultSet resultSet) throws SQLException {
+        return this.asCartesianCoordinate().readFrom(resultSet).asSphericCoordinate();
+    }
+
+    @Override
+    public void writeOn(ResultSet resultSet) throws SQLException {
+        this.asCartesianCoordinate().writeOn(resultSet);
+
     }
 
     public double getPhi() {
@@ -85,5 +114,12 @@ public class SphericCoordinate implements Coordiante {
 
     public void setRadius(double radius) {
         this.radius = radius;
+    }
+
+    static void assertNotNull(Object o) {
+        if (o == null) {
+            throw new IllegalArgumentException("object was null");
+        }
+        return;
     }
 }

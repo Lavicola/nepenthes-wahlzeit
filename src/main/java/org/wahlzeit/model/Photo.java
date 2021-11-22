@@ -488,7 +488,7 @@ public class Photo extends DataObject {
 		* According to the UML of the last week every photo belongs to exactly one Location Instance,
 		* thats why we create a new location instance
 		*/
-		this.location = new Location(new CartesianCoordinates(location.getCoordinate().getX(), location.getCoordinate().getY(), location.getCoordinate().getZ()));
+		this.location = new Location(new CartesianCoordinate(location.getCoordinate().getX(), location.getCoordinate().getY(), location.getCoordinate().getZ()));
 		incWriteCount();
 		return;
 	}
