@@ -1,5 +1,6 @@
 package org.wahlzeit.model;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -72,8 +73,8 @@ public class CoordinateTest {
 
     @Test
     public void getCentralAngle() {
-        assertEquals(1.1323356352216298, cartesianCoordinate0.getCentralAngle(cartesianCoordinate1), delta);
-        assertEquals(-1.4427519829447186, sphericCoordinates0.getCentralAngle(cartesianCoordinate1), delta);
+        assertEquals(-1.1472378623557706, cartesianCoordinate0.getCentralAngle(cartesianCoordinate1), delta);
+        assertEquals(1.1271433330670633, sphericCoordinates0.getCentralAngle(cartesianCoordinate1), delta);
     }
 
     @Test
@@ -104,8 +105,15 @@ public class CoordinateTest {
         verify(resultSet, times(1)).updateDouble(eq("coordinate_z"), anyDouble());
     }
 
+    @Test
+    public void testHashCode(){
+        assertEquals(cartesianCoordinate0.hashCode(),sphericCoordinates0.hashCode());
+        assertNotEquals(sphericCoordinates1.hashCode(),cartesianCoordinate0.hashCode());
+    }
 
-
-
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullArgument() {
+        cartesianCoordinate0.equals(null);
+    }
 
 }

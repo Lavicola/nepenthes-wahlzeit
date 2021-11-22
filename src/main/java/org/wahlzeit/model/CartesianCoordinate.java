@@ -19,6 +19,7 @@ public class CartesianCoordinate implements Coordinate {
     private final double y;
     private final double z;
     public final static double EPSILON = 1e-5;
+    public final static double EPSILON_CUT = 1e5;
 
 
     /**
@@ -115,7 +116,8 @@ public class CartesianCoordinate implements Coordinate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z);
+        //Since equals only look at the EPSILION places behind the comma, we need to make sure that our hash only looks EPSILION_CUT behind our comma
+        return Objects.hash(cutdecimal(x), cutdecimal(y), cutdecimal(z));
     }
 
     @Override
@@ -134,7 +136,7 @@ public class CartesianCoordinate implements Coordinate {
         }
         double theta = Math.acos(z / radius);
         double phi = CalculatePhi(x, y);
-        return new SphericCoordinate(phi, theta, radius);
+        return new SphericCoordinate(radius, theta, phi);
     }
 
 
@@ -171,6 +173,13 @@ public class CartesianCoordinate implements Coordinate {
         }
         return;
     }
+
+
+    private static double cutdecimal(double number) {
+        return Math.floor(number * EPSILON_CUT) / EPSILON_CUT;
+    }
+
+
 }
 
 

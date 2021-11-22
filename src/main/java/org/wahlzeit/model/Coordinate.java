@@ -24,4 +24,5 @@ public interface Coordinate {
 
      void writeOn(ResultSet resultSet) throws SQLException;
 
+
 }

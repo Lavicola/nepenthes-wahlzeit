@@ -8,6 +8,7 @@ package org.wahlzeit.model;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
+// We don´t implement a setter since it does not make sense to change the coordiantes of a location later on.
 public class Location {
     private CartesianCoordinate cartesianCoordinate = null;
 
@@ -41,11 +42,11 @@ public class Location {
     }
 
 	public Location readFrom(ResultSet rset) throws SQLException {
-        Coordinate cartesianCoordinate = this.cartesianCoordinate.readFrom(rset);
+        CartesianCoordinate cartesianCoordinate = this.cartesianCoordinate.readFrom(rset).asCartesianCoordinate();
         if(cartesianCoordinate == null){
             return null;
         }else{
-            return new Location(cartesianCoordinate.asCartesianCoordinate());
+            return new Location(cartesianCoordinate);
         }
         
     }
