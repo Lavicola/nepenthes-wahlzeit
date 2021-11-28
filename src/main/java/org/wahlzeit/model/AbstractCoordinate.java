@@ -69,6 +69,7 @@ public class AbstractCoordinate implements Coordinate {
     @Override
     public int hashCode() {
         CartesianCoordinate coordinate = this.asCartesianCoordinate();
+        // Since EPSILON does allow inaccuracy we can´t use the full double value to hash.
         return Objects.hash(Math.round(coordinate.getX() * ROUND_POSITION), Math.round(coordinate.getY() * ROUND_POSITION), Math.round(coordinate.getZ() * ROUND_POSITION));
     }
 
