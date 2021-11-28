@@ -1,4 +1,5 @@
 package org.wahlzeit.model;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -21,11 +22,8 @@ public class CoordinateTest {
     // SphericCoordinate Angels are in Radian
     private SphericCoordinate sphericCoordinates0;
     private SphericCoordinate sphericCoordinates1;
-    private SphericCoordinate sphericCoordinates2;
     private CartesianCoordinate cartesianCoordinate0;
     private CartesianCoordinate cartesianCoordinate1;
-    private CartesianCoordinate cartesianCoordinate2;
-    private final double delta = CartesianCoordinate.EPSILON;
 
     @Mock
     private ResultSet resultSet;
@@ -34,14 +32,12 @@ public class CoordinateTest {
     @Before
     public void setUp() {
         //equal
-        sphericCoordinates0 = new SphericCoordinate(5, 50, 60);
-        cartesianCoordinate0 = new CartesianCoordinate(-1.470659472, 0.3998732106, -4.762064902);
+        cartesianCoordinate0 = new CartesianCoordinate(3, 3, 3);
+        sphericCoordinates0 = new SphericCoordinate(5.196152422706632, 0.7853981633974483, 0.9553166181245093);
         //equal
-        cartesianCoordinate1 = new CartesianCoordinate(4.453352832, -8.885331406, -1.103872438);
-        sphericCoordinates1 = new SphericCoordinate(80, 90.0, 10);
-        //equal
-        sphericCoordinates2 = new SphericCoordinate(-5, -50, -80);
-        cartesianCoordinate2 = new CartesianCoordinate(-4.795343936, -1.303856951, 0.5519362192);
+        sphericCoordinates1 = new SphericCoordinate(10, 0.3, 0.8);
+        cartesianCoordinate1 = new CartesianCoordinate(6.853164493328191, 2.1199322023239766, 6.967067093471654);
+
 
         try {
             Mockito.when(resultSet.getDouble("coordinate_x")).thenReturn(5.0);
@@ -54,64 +50,79 @@ public class CoordinateTest {
 
     }
 
-    //this test checks  both: if equal and if the transformation from spheric -> cartesian works
+    //check if the transformation spheric --> cartesian works
     @Test
-    public void sphericCoordinatesToCartesianCoordinatesTest() {
+    public void asCartesianCoordinateTest() {
+        CartesianCoordinate coordinate0 = sphericCoordinates0.asCartesianCoordinate();
+        CartesianCoordinate coordinate1 = sphericCoordinates1.asCartesianCoordinate();
+
+        assertEquals(cartesianCoordinate0.getX(), coordinate0.getX(), AbstractCoordinate.EPSILON);
+        assertEquals(cartesianCoordinate0.getY(), coordinate0.getY(), AbstractCoordinate.EPSILON);
+        assertEquals(cartesianCoordinate0.getZ(), coordinate0.getZ(), AbstractCoordinate.EPSILON);
+
+        assertEquals(cartesianCoordinate1.getX(), coordinate1.getX(), AbstractCoordinate.EPSILON);
+        assertEquals(cartesianCoordinate1.getY(), coordinate1.getY(), AbstractCoordinate.EPSILON);
+        assertEquals(cartesianCoordinate1.getZ(), coordinate1.getZ(), AbstractCoordinate.EPSILON);
+        return;
+    }
+
+
+    //check if the transformation cartesian --> spheric works
+    @Test
+    public void asSphericCoordinateTest() {
+        SphericCoordinate coordinate0 = cartesianCoordinate0.asSphericCoordinate();
+        SphericCoordinate coordinate1 = cartesianCoordinate1.asSphericCoordinate();
+
+        assertEquals(sphericCoordinates0.getRadius(), coordinate0.getRadius(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates0.getPhi(), coordinate0.getPhi(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates0.getTheta(), coordinate0.getTheta(), AbstractCoordinate.EPSILON);
+
+        assertEquals(sphericCoordinates1.getRadius(), coordinate1.getRadius(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates1.getPhi(), coordinate1.getPhi(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates1.getTheta(), coordinate1.getTheta(), AbstractCoordinate.EPSILON);
+
+    }
+
+    @Test
+    public void equalsTest() {
         assertEquals(true, cartesianCoordinate0.equals(sphericCoordinates0));
-        assertEquals(false, cartesianCoordinate1.equals(sphericCoordinates0));
-        assertEquals(true, cartesianCoordinate2.equals(sphericCoordinates2));
-
-    }
-
-    //this test checks both: if equal and if the transformation from cartesian -> spheric works
-    @Test
-    public void cartesianCoordinatesToSphericCoordinatesTest() {
-        assertEquals(true, sphericCoordinates0.equals(cartesianCoordinate0));
-        assertEquals(false, sphericCoordinates1.equals(cartesianCoordinate0));
-        assertEquals(true, sphericCoordinates2.equals(cartesianCoordinate2));
+        assertEquals(false, cartesianCoordinate0.equals(sphericCoordinates1));
+        assertEquals(true, sphericCoordinates1.equals(cartesianCoordinate1));
+        assertEquals(false, sphericCoordinates1.equals(sphericCoordinates0));
     }
 
     @Test
-    public void getCentralAngle() {
-        assertEquals(-1.1472378623557706, cartesianCoordinate0.getCentralAngle(cartesianCoordinate1), delta);
-        assertEquals(1.1271433330670633, sphericCoordinates0.getCentralAngle(cartesianCoordinate1), delta);
+    public void testHashCode() {
+        assertEquals(cartesianCoordinate0.hashCode(), sphericCoordinates0.hashCode());
+        assertEquals(cartesianCoordinate1.hashCode(), sphericCoordinates1.hashCode());
     }
 
     @Test
     public void getCartesianDistanceTest() {
-        CartesianCoordinate coordinate0 = new CartesianCoordinate(1.0, 1.0, 1.0);
-        CartesianCoordinate coordinate1 = new CartesianCoordinate(1.0, 0.0, 0.0);
-        SphericCoordinate s_coordinate0 = coordinate0.asSphericCoordinate();
-        double d = s_coordinate0.getCartesianDistance(coordinate1);
+        assertEquals(0, sphericCoordinates0.getCartesianDistance(cartesianCoordinate0), AbstractCoordinate.EPSILON);
+        assertEquals(10, sphericCoordinates1.getCartesianDistance(new CartesianCoordinate(0, 0, 0)), AbstractCoordinate.EPSILON);
+    }
 
-        assertEquals(1.4142135623730951, coordinate0.getCartesianDistance(coordinate1), delta);
-
-        //TODO Distance does not work yet
-        //assertEquals(1.4142135623730951, s_coordinate0.getCartesianDistance(coordinate1), delta);
-
-
+    @Test
+    public void getCentralAngle() {
+        assertEquals(0.5496167631033911, cartesianCoordinate0.getCentralAngle(cartesianCoordinate1), AbstractCoordinate.EPSILON);
     }
 
     @Test
     public void testReadFrom() throws SQLException {
-        CartesianCoordinate coordinate = cartesianCoordinate0.readFrom(resultSet).asCartesianCoordinate();
-        assertEquals(5, coordinate.getX(),0);
-        assertEquals(5, coordinate.getY(),0);
-        assertEquals(5, coordinate.getZ(),0);
+        CartesianCoordinate coordinate = CartesianCoordinate.readFrom(resultSet).asCartesianCoordinate();
+        assertEquals(5, coordinate.getX(), 0);
+        assertEquals(5, coordinate.getY(), 0);
+        assertEquals(5, coordinate.getZ(), 0);
     }
 
     @Test
     public void testWriteOn() throws SQLException {
         cartesianCoordinate0.writeOn(resultSet);
-        verify(resultSet, times(1)).updateDouble(eq("coordinate_x"), anyDouble());
-        verify(resultSet, times(1)).updateDouble(eq("coordinate_y"), anyDouble());
-        verify(resultSet, times(1)).updateDouble(eq("coordinate_z"), anyDouble());
-    }
-
-    @Test
-    public void testHashCode(){
-        assertEquals(cartesianCoordinate0.hashCode(),sphericCoordinates0.hashCode());
-        assertNotEquals(sphericCoordinates1.hashCode(),cartesianCoordinate0.hashCode());
+        sphericCoordinates0.writeOn(resultSet);
+        verify(resultSet, times(2)).updateDouble(eq(AbstractCoordinate.COLUMN_X), anyDouble());
+        verify(resultSet, times(2)).updateDouble(eq(AbstractCoordinate.COLUMN_Y), anyDouble());
+        verify(resultSet, times(2)).updateDouble(eq(AbstractCoordinate.COLUMN_Z), anyDouble());
     }
 
     @Test(expected = IllegalArgumentException.class)

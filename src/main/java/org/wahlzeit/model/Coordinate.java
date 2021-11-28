@@ -5,11 +5,11 @@ import java.sql.SQLException;
 
 public interface Coordinate {
 
-    CartesianCoordinate asCartesianCoordinate();
+    CartesianCoordinate asCartesianCoordinate() throws ArithmeticException;
 
     double getCartesianDistance(Coordinate coordinate);
 
-    SphericCoordinate asSphericCoordinate();
+    SphericCoordinate asSphericCoordinate() throws ArithmeticException;
 
     double getCentralAngle(Coordinate coordinate);
 
@@ -20,7 +20,9 @@ public interface Coordinate {
      * But in the database only the Cartesian values will be stored.
      * That means in the readFrom Method the Coordiantes will be Converted to the corresponding class
      */
-     Coordinate readFrom(ResultSet resultSet) throws SQLException;
+     static Coordinate readFrom(ResultSet resultSet) throws SQLException {
+         return null;
+    }
 
      void writeOn(ResultSet resultSet) throws SQLException;
 

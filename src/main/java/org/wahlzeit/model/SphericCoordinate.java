@@ -4,101 +4,34 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class SphericCoordinate implements Coordinate {
+public class SphericCoordinate extends AbstractCoordinate {
 
     protected double phi;
     protected double theta;
     protected double radius;
 
-    public SphericCoordinate(double radius, double theta, double phi) {
+
+    /**
+     * @param radius value can´t be negative
+     * @param phi    value must be between 0 and 360
+     * @param theta  value must be between 0 and 180
+     */
+    public SphericCoordinate(double radius, double phi, double theta) {
         // The Angle Unit is in Radian
+        assertCodomain(radius, phi, theta);
+        this.radius = radius;
         this.phi = phi;
         this.theta = theta;
-        this.radius = radius;
     }
 
 
     @Override
-    public CartesianCoordinate asCartesianCoordinate() {
+    public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
         double x, y, z;
-        x = radius * Math.sin(phi) * Math.cos(theta);
-        y = radius * Math.sin(phi) * Math.sin(theta);
-        z = radius * Math.cos(phi);
+        x = radius * Math.sin(theta) * Math.cos(phi);
+        y = radius * Math.sin(theta) * Math.sin(phi);
+        z = radius * Math.cos(theta);
         return new CartesianCoordinate(x, y, z);
-    }
-
-    //ϕ phi    || θ teta
-    @Override
-    public double getCartesianDistance(Coordinate coordinate) {
-        return this.asCartesianCoordinate().getCartesianDistance(coordinate.asCartesianCoordinate());
-    }
-
-    @Override
-    public SphericCoordinate asSphericCoordinate() {
-        return new SphericCoordinate(phi, theta, radius);
-    }
-
-    @Override
-    public double getCentralAngle(Coordinate coordinate) {
-        assertNotNull(coordinate);
-        return calculateCentralAngle(coordinate.asSphericCoordinate());
-    }
-
-    private double calculateCentralAngle(SphericCoordinate c) {
-        //calculated using https://wikimedia.org/api/rest_v1/media/math/render/svg/87cea288a5b6e80757bc81375c3b6a38a30a5184 formular
-        double phi1 = this.getPhi();
-        double phi2 = c.getPhi();
-        double theta1 = this.getTheta();
-        double thehta2 = c.getTheta();
-        double phi_delta = phi1 - phi2;
-        double theta_delta = theta1 - thehta2;
-        double first_term = Math.pow(
-                Math.cos(phi2) * Math.sin(theta_delta),
-                2);
-        double second_term = Math.pow(
-                Math.cos(phi1) * Math.sin(phi2)
-                        - (Math.sin(phi1) * Math.cos(phi2) * Math.cos(theta_delta))
-                , 2);
-        double third_term = Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(theta_delta);
-
-        return Math.atan((Math.sqrt(first_term + second_term)) / third_term);
-
-    }
-
-
-    // equals forwards to isEqual and then to the CartesianCoordinate isEqual function.
-    @Override
-    public boolean equals(Object o) {
-        assertNotNull(o);
-        if (o instanceof Coordinate) {
-            return this.isEqual((Coordinate) o);
-        } else {
-            throw new IllegalArgumentException();
-        }
-
-    }
-
-    // Since we forward equals to the CartesianCoordinate we will also forward the hashCode call
-    @Override
-    public int hashCode() {
-        return this.asCartesianCoordinate().hashCode();
-    }
-
-    @Override
-    public boolean isEqual(Coordinate coordinate) {
-        return this.asCartesianCoordinate().isEqual(coordinate.asCartesianCoordinate());
-    }
-
-    // the Database stores the values in Cartesian format therefore we call it via the CartesianCoordiante and later on convert it to asSphericCoordinate
-    @Override
-    public Coordinate readFrom(ResultSet resultSet) throws SQLException {
-        return this.asCartesianCoordinate().readFrom(resultSet).asSphericCoordinate();
-    }
-
-    @Override
-    public void writeOn(ResultSet resultSet) throws SQLException {
-        this.asCartesianCoordinate().writeOn(resultSet);
-
     }
 
     public double getPhi() {
@@ -125,10 +58,30 @@ public class SphericCoordinate implements Coordinate {
         this.radius = radius;
     }
 
-    static void assertNotNull(Object o) {
-        if (o == null) {
-            throw new IllegalArgumentException("object was null");
-        }
-        return;
+
+    public void assertCodomain(double radius, double phi, double theta) {
+        assertPhiCodomain(phi);
+        assertRadiusCodomain(radius);
+        assertThetaCodomain(theta);
     }
+
+    public void assertPhiCodomain(double phi) {
+        if (phi < 0 || phi > 360) {
+            throw new IllegalArgumentException("Phi has to be between 0° and 360°");
+        }
+    }
+
+    public void assertThetaCodomain(double theta) {
+        if (theta < 0 || theta > 180) {
+            throw new IllegalArgumentException("Thetha has to be between 0° and 180°");
+        }
+    }
+
+    public void assertRadiusCodomain(double radius) {
+        if (radius < 0) {
+            throw new IllegalArgumentException("Radius cant be negative");
+        }
+    }
+
+
 }
