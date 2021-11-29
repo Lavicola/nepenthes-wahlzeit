@@ -120,9 +120,9 @@ public class CoordinateTest {
     public void testWriteOn() throws SQLException {
         cartesianCoordinate0.writeOn(resultSet);
         sphericCoordinates0.writeOn(resultSet);
-        verify(resultSet, times(2)).updateDouble(eq(AbstractCoordinate.COLUMN_X), anyDouble());
-        verify(resultSet, times(2)).updateDouble(eq(AbstractCoordinate.COLUMN_Y), anyDouble());
-        verify(resultSet, times(2)).updateDouble(eq(AbstractCoordinate.COLUMN_Z), anyDouble());
+        verify(resultSet, times(2)).updateDouble(eq(CartesianCoordinate.COLUMN_X), anyDouble());
+        verify(resultSet, times(2)).updateDouble(eq(CartesianCoordinate.COLUMN_Y), anyDouble());
+        verify(resultSet, times(2)).updateDouble(eq(CartesianCoordinate.COLUMN_Z), anyDouble());
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -4,31 +4,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class AbstractCoordinate implements Coordinate {
+public abstract class AbstractCoordinate implements Coordinate {
 
     public final static int PRECISION = 5;
     public final static double EPSILON = Math.pow(10, -PRECISION);
     public final static double ROUND_POSITION = Math.pow(10, PRECISION);
 
-    public final static String COLUMN_X = "coordinate_x";
-    public final static String COLUMN_Y = "coordinate_y";
-    public final static String COLUMN_Z = "coordinate_z";
-
 
     @Override
-    public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException{
-        return (CartesianCoordinate) this;
-    }
-
+    public abstract CartesianCoordinate asCartesianCoordinate() throws ArithmeticException;
     @Override
-    public SphericCoordinate asSphericCoordinate() throws ArithmeticException {
-        return (SphericCoordinate) this;
-    }
+    public abstract SphericCoordinate asSphericCoordinate() throws ArithmeticException;
+
 
     @Override
     public double getCartesianDistance(Coordinate coordinate) {
+        // Precondition: argument shall not be null
         assertNotNull(coordinate);
 
+        // Converting both coordinates to cartesian we can gurantee/restore class invariant since CartesianDistance can only be calculated with  cartesian Cooordiantes
         CartesianCoordinate coordinate1 = this.asCartesianCoordinate();
         CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
 
@@ -43,7 +37,9 @@ public class AbstractCoordinate implements Coordinate {
     @Override
     public double getCentralAngle(Coordinate coordinate) {
         // Calculated using: https://en.wikipedia.org/wiki/Great-circle_distance --> https://wikimedia.org/api/rest_v1/media/math/render/svg/87cea288a5b6e80757bc81375c3b6a38a30a5184
+        // Precondition: argument shall not be null
         assertNotNull(coordinate);
+        // With converting both coordinates to Spheric first we gurantee/restore class invariants since Central Angle can only get calculated with SphericCoordinates.
         SphericCoordinate coordinate1 = this.asSphericCoordinate();
         SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
         double phi1 = coordinate1.getLongitude();
@@ -103,34 +99,6 @@ public class AbstractCoordinate implements Coordinate {
 
     private boolean checkEqualDouble(double d1, double d2) {
         return EPSILON > Math.abs(d1 - d2);
-    }
-
-
-    /**
-     * Since the values are stored with the cartesian format every sublcass must know the Database layout in order to access values.
-     * Therefore it makes sense to implement this method in the abstract class. Every subclass can call this Method to get the values back
-     * and later on can convert it to it subclass type
-     *
-     * @param resultSet
-     */
-    public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
-        double x = resultSet.getDouble(COLUMN_X);
-        if (!resultSet.wasNull()) {
-            return new CartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
-        }
-        return null;
-    }
-
-    // Both classes Spherical and Cartesian accessing this function and since the sequence is the same for both it makes sense to implement this methode here
-    @Override
-    public void writeOn(ResultSet resultSet) throws SQLException {
-        if (resultSet == null) {
-            throw new IllegalArgumentException("ResultSet is null");
-        }
-        CartesianCoordinate coordinate = this.asCartesianCoordinate();
-        resultSet.updateDouble(COLUMN_X, coordinate.getX());
-        resultSet.updateDouble(COLUMN_Y, coordinate.getY());
-        resultSet.updateDouble(COLUMN_Z, coordinate.getZ());
     }
 
 

@@ -1,23 +1,18 @@
-/*
- * SPDX-FileCopyrightText: 2021 David Schmidt https://github.com/Lavicola
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
 package org.wahlzeit.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
+public class CartesianCoordinate extends AbstractCoordinate{
 
-/**
- * Cartesian coordinates .
- */
-public class CartesianCoordinate extends AbstractCoordinate {
     //immutable since it does not make sense to change the coordiantes later on.
     private final double x;
     private final double y;
     private final double z;
+    //database columns
+    public final static String COLUMN_X = "coordinate_x";
+    public final static String COLUMN_Y = "coordinate_y";
+    public final static String COLUMN_Z = "coordinate_z";
 
 
     /**
@@ -28,6 +23,13 @@ public class CartesianCoordinate extends AbstractCoordinate {
         this.y = y;
         this.z = z;
     }
+
+
+    @Override
+    public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
+        return this;
+    }
+
 
     @Override
     public SphericCoordinate asSphericCoordinate() throws ArithmeticException {
@@ -43,9 +45,35 @@ public class CartesianCoordinate extends AbstractCoordinate {
         return new SphericCoordinate(radius, phi, theta);
     }
 
+
+
     /**
-     * @methodtype get
+     * The class itself knows it structure best, therefore read and write will be defined here and not in the abstract class
+     * @param resultSet
      */
+    public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
+        assertNotNull(resultSet);
+        double x = resultSet.getDouble(COLUMN_X);
+        if (!resultSet.wasNull()) {
+            return new CartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
+        }
+        return null;
+    }
+
+    @Override
+    public void writeOn(ResultSet resultSet) throws SQLException {
+        assertNotNull(resultSet);
+        CartesianCoordinate coordinate = this.asCartesianCoordinate();
+        resultSet.updateDouble(COLUMN_X, coordinate.getX());
+        resultSet.updateDouble(COLUMN_Y, coordinate.getY());
+        resultSet.updateDouble(COLUMN_Z, coordinate.getZ());
+    }
+
+
+
+    /**
+         * @methodtype get
+         */
     public double getX() {
         return this.x;
     }
@@ -63,6 +91,5 @@ public class CartesianCoordinate extends AbstractCoordinate {
     public double getZ() {
         return this.z;
     }
-
 
 }

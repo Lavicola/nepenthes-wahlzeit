@@ -1,5 +1,8 @@
 package org.wahlzeit.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class SphericCoordinate extends AbstractCoordinate {
 
     protected double longitude;
@@ -21,6 +24,7 @@ public class SphericCoordinate extends AbstractCoordinate {
     }
 
 
+
     @Override
     public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
         double x, y, z;
@@ -28,6 +32,22 @@ public class SphericCoordinate extends AbstractCoordinate {
         y = radius * Math.sin(latitude) * Math.sin(longitude);
         z = radius * Math.cos(latitude);
         return new CartesianCoordinate(x, y, z);
+    }
+
+    @Override
+    public SphericCoordinate asSphericCoordinate() throws ArithmeticException {
+        return this;
+    }
+
+
+    public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
+        // since the values are stored as Cartesian we must use the Cartestian function to the values of ot the database
+        return CartesianCoordinate.readFrom(resultSet).asSphericCoordinate();
+    }
+
+    @Override
+    public void writeOn(ResultSet resultSet) throws SQLException {
+        this.asCartesianCoordinate().writeOn(resultSet);
     }
 
     public double getLongitude() {
@@ -53,7 +73,6 @@ public class SphericCoordinate extends AbstractCoordinate {
     public void setRadius(double radius) {
         this.radius = radius;
     }
-
 
     public void assertCodomain(double radius, double longitude, double latitude) {
         assertLongitudeCodomain(longitude);
