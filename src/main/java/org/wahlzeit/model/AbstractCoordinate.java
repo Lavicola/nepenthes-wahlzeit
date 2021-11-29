@@ -46,10 +46,10 @@ public class AbstractCoordinate implements Coordinate {
         assertNotNull(coordinate);
         SphericCoordinate coordinate1 = this.asSphericCoordinate();
         SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
-        double phi1 = coordinate1.getPhi();
-        double phi2 = coordinate2.getPhi();
-        double theta1 = coordinate1.getTheta();
-        double thehta2 = coordinate2.getTheta();
+        double phi1 = coordinate1.getLongitude();
+        double phi2 = coordinate2.getLongitude();
+        double theta1 = coordinate1.getLatitude();
+        double thehta2 = coordinate2.getLatitude();
         double theta_delta = theta1 - thehta2;
 
         double first_term = Math.pow(

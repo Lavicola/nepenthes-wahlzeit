@@ -74,12 +74,12 @@ public class CoordinateTest {
         SphericCoordinate coordinate1 = cartesianCoordinate1.asSphericCoordinate();
 
         assertEquals(sphericCoordinates0.getRadius(), coordinate0.getRadius(), AbstractCoordinate.EPSILON);
-        assertEquals(sphericCoordinates0.getPhi(), coordinate0.getPhi(), AbstractCoordinate.EPSILON);
-        assertEquals(sphericCoordinates0.getTheta(), coordinate0.getTheta(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates0.getLongitude(), coordinate0.getLongitude(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates0.getLatitude(), coordinate0.getLatitude(), AbstractCoordinate.EPSILON);
 
         assertEquals(sphericCoordinates1.getRadius(), coordinate1.getRadius(), AbstractCoordinate.EPSILON);
-        assertEquals(sphericCoordinates1.getPhi(), coordinate1.getPhi(), AbstractCoordinate.EPSILON);
-        assertEquals(sphericCoordinates1.getTheta(), coordinate1.getTheta(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates1.getLongitude(), coordinate1.getLongitude(), AbstractCoordinate.EPSILON);
+        assertEquals(sphericCoordinates1.getLatitude(), coordinate1.getLatitude(), AbstractCoordinate.EPSILON);
 
     }
 

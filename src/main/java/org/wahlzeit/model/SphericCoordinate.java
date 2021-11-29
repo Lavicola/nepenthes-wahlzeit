@@ -1,53 +1,49 @@
 package org.wahlzeit.model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Objects;
-
 public class SphericCoordinate extends AbstractCoordinate {
 
-    protected double phi;
-    protected double theta;
+    protected double longitude;
+    protected double latitude;
     protected double radius;
 
 
     /**
      * @param radius value can´t be negative
-     * @param phi    value must be between 0 and 360
-     * @param theta  value must be between 0 and 180
+     * @param longitude    value must be between 0 and 360
+     * @param latitude  value must be between 0 and 180
      */
-    public SphericCoordinate(double radius, double phi, double theta) {
+    public SphericCoordinate(double radius, double longitude, double latitude) {
         // The Angle Unit is in Radian
-        assertCodomain(radius, phi, theta);
+        assertCodomain(radius, longitude, latitude);
         this.radius = radius;
-        this.phi = phi;
-        this.theta = theta;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
         double x, y, z;
-        x = radius * Math.sin(theta) * Math.cos(phi);
-        y = radius * Math.sin(theta) * Math.sin(phi);
-        z = radius * Math.cos(theta);
+        x = radius * Math.sin(latitude) * Math.cos(longitude);
+        y = radius * Math.sin(latitude) * Math.sin(longitude);
+        z = radius * Math.cos(latitude);
         return new CartesianCoordinate(x, y, z);
     }
 
-    public double getPhi() {
-        return phi;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setPhi(double phi) {
-        this.phi = phi;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-    public double getTheta() {
-        return theta;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setTheta(double theta) {
-        this.theta = theta;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public double getRadius() {
@@ -59,20 +55,20 @@ public class SphericCoordinate extends AbstractCoordinate {
     }
 
 
-    public void assertCodomain(double radius, double phi, double theta) {
-        assertPhiCodomain(phi);
+    public void assertCodomain(double radius, double longitude, double latitude) {
+        assertLongitudeCodomain(longitude);
         assertRadiusCodomain(radius);
-        assertThetaCodomain(theta);
+        assertLatitudeCodomain(latitude);
     }
 
-    public void assertPhiCodomain(double phi) {
-        if (phi < 0 || phi > 360) {
-            throw new IllegalArgumentException("Phi has to be between 0° and 360°");
+    public void assertLongitudeCodomain(double longitude) {
+        if (longitude < 0 || longitude > 360) {
+            throw new IllegalArgumentException("Longitude has to be between 0° and 360°");
         }
     }
 
-    public void assertThetaCodomain(double theta) {
-        if (theta < 0 || theta > 180) {
+    public void assertLatitudeCodomain(double latitude) {
+        if (latitude < 0 || latitude > 180) {
             throw new IllegalArgumentException("Thetha has to be between 0° and 180°");
         }
     }
