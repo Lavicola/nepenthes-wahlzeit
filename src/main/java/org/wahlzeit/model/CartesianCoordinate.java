@@ -43,16 +43,19 @@ public class CartesianCoordinate extends AbstractCoordinate{
         }
         double phi = Math.atan2(y, x);
         double theta = Math.acos(z / radius);
-        return new SphericCoordinate(radius, phi, theta);
+        SphericCoordinate sphericCoordinate = new SphericCoordinate(radius, phi, theta);
+        //check if the Cartesian Coordiante can be displayed as spheric coordiante. (Redundant since it will be checked in the constructor anyway but just for demonstration I did add it.
+        sphericCoordinate.assertClassInvariants();
+        return sphericCoordinate;
     }
 
 
     @Override
     public double getCartesianDistance(Coordinate coordinate) {
-        // Precondition: argument shall not be null
+        // Precondition: argument shall not be null and must be of type Coordinate or subtype
         assertNotNull(coordinate);
+        assertIsExceptedObject(coordinate);
 
-        // Converting both coordinates to cartesian we can gurantee/restore class invariant since CartesianDistance can only be calculated with  cartesian Cooordiantes
         CartesianCoordinate coordinate1 = this.asCartesianCoordinate();
         CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
 
@@ -74,12 +77,11 @@ public class CartesianCoordinate extends AbstractCoordinate{
 
     @Override
     public boolean equals(Object o) {
+        // Precondition: object must be not null and must be of type Coordiante or subtype
         assertNotNull(o);
-        if (o instanceof Coordinate) {
-            return this.isEqual((Coordinate) o);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        assertIsExceptedObject(o);
+
+        return this.isEqual((Coordinate) o);
     }
 
     @Override
@@ -114,7 +116,6 @@ public class CartesianCoordinate extends AbstractCoordinate{
      * @param resultSet
      */
     public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
-        assertNotNull(resultSet);
         double x = resultSet.getDouble(COLUMN_X);
         if (!resultSet.wasNull()) {
             return new CartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
@@ -131,8 +132,14 @@ public class CartesianCoordinate extends AbstractCoordinate{
         resultSet.updateDouble(COLUMN_Z, coordinate.getZ());
     }
 
+    /**
+     * Since every number is valid in a cartesian coordinatesystem there is nothing to test here
+     */
+    @Override
+    protected void assertClassInvariants() {
 
-
+        return;
+    }
 
 
     /**

@@ -27,4 +27,14 @@ public interface Coordinate {
      void writeOn(ResultSet resultSet) throws SQLException;
 
 
+     void assertNotNull(Object o);
+
+     void assertIsExceptedObject(Object o);
+
+     //check if the object space is valid
+     private void assertClassInvariants(){
+
+     };
+
+
 }
