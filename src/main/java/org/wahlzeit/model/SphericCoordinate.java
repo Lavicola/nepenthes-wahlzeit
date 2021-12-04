@@ -24,7 +24,6 @@ public class SphericCoordinate extends AbstractCoordinate {
     }
 
 
-
     @Override
     public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
         double x, y, z;
@@ -38,6 +37,36 @@ public class SphericCoordinate extends AbstractCoordinate {
     public SphericCoordinate asSphericCoordinate() throws ArithmeticException {
         return this;
     }
+
+
+    @Override
+    public double getCentralAngle(Coordinate coordinate) {
+        // Calculated using: https://en.wikipedia.org/wiki/Great-circle_distance --> https://wikimedia.org/api/rest_v1/media/math/render/svg/87cea288a5b6e80757bc81375c3b6a38a30a5184
+        // Precondition: argument shall not be null
+        assertNotNull(coordinate);
+        // With converting both coordinates to Spheric first we gurantee/restore class invariants since Central Angle can only get calculated with SphericCoordinates.
+        SphericCoordinate coordinate1 = this.asSphericCoordinate();
+        SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
+        double phi1 = coordinate1.getLongitude();
+        double phi2 = coordinate2.getLongitude();
+        double theta1 = coordinate1.getLatitude();
+        double thehta2 = coordinate2.getLatitude();
+        double theta_delta = theta1 - thehta2;
+
+        double first_term = Math.pow(
+                Math.cos(phi2) *
+                        Math.sin(theta_delta),
+                2);
+
+        double second_term = Math.pow(Math.cos(phi1) * Math.sin(phi2) -
+                        Math.sin(phi1) * Math.cos(phi2) * Math.cos(theta_delta),
+                2);
+        double third_term = Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(theta_delta);
+
+
+        return Math.sqrt((first_term + second_term)) / third_term;
+    }
+
 
 
     public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
