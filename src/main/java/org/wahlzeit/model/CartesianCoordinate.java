@@ -20,10 +20,10 @@ public class CartesianCoordinate extends AbstractCoordinate {
      * @methodtype constructor
      */
     public CartesianCoordinate(double x, double y, double z) {
-        assertClassInvariants();
         this.x = x;
         this.y = y;
         this.z = z;
+        assertClassInvariants();
     }
 
 
@@ -35,8 +35,6 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
     @Override
     public SphericCoordinate asSphericCoordinate() throws ArithmeticException {
-        // Precondition: CartesianCoordinate must be valid
-        this.assertClassInvariants();
         // The Angle Unit is in Radian
         double radius = Math.sqrt((Math.pow(x, 2) +
                 Math.pow(y, 2) +
@@ -92,12 +90,11 @@ public class CartesianCoordinate extends AbstractCoordinate {
         assertNotNull(coordinate);
 
         CartesianCoordinate coordinate1 = coordinate.asCartesianCoordinate();
-        CartesianCoordinate coordinate2 = this.asCartesianCoordinate();
         //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
 
-        boolean isXEqual = checkEqualDouble(coordinate1.getX(), coordinate2.getX());
-        boolean isYEqual = checkEqualDouble(coordinate1.getY(), coordinate2.getY());
-        boolean isZEqual = checkEqualDouble(coordinate1.getZ(), coordinate2.getZ());
+        boolean isXEqual = checkEqualDouble(coordinate1.getX(), this.getX());
+        boolean isYEqual = checkEqualDouble(coordinate1.getY(), this.getY());
+        boolean isZEqual = checkEqualDouble(coordinate1.getZ(), this.getZ());
 
         if (isXEqual && isYEqual && isZEqual) {
             return true;

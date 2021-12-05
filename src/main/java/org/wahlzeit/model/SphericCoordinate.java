@@ -16,10 +16,10 @@ public class SphericCoordinate extends AbstractCoordinate {
      * @param latitude  value must be between 0 and 180
      */
     public SphericCoordinate(double radius, double longitude, double latitude) {
-        assertClassInvariants();
         this.radius = radius;
         this.longitude = longitude;
         this.latitude = latitude;
+        assertClassInvariants();
     }
 
 
@@ -45,12 +45,11 @@ public class SphericCoordinate extends AbstractCoordinate {
         //Precondition: Object shall be not Null and must be an instance of Coordiante/CartesianCoordiante or SphericCoordinate
         assertIsExceptedObject(coordinate);
         assertNotNull(coordinate);
-        SphericCoordinate coordinate1 = this.asSphericCoordinate();
         SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
         //assertClassInvariants is  checked in the constructor
-        double phi1 = coordinate1.getLongitude();
+        double phi1 = this.getLongitude();
         double phi2 = coordinate2.getLongitude();
-        double theta1 = coordinate1.getLatitude();
+        double theta1 = this.getLatitude();
         double thehta2 = coordinate2.getLatitude();
         double theta_delta = theta1 - thehta2;
 
@@ -87,28 +86,48 @@ public class SphericCoordinate extends AbstractCoordinate {
      * latitude  value must be between 0 and 180
      */
     protected void assertClassInvariants() {
-        assertLongitudeCodomain(this.getLongitude());
-        assertRadiusCodomain(this.getRadius());
-        assertLatitudeCodomain(this.getLatitude());
+        assertLongitudeCodomain();
+        assertRadiusCodomain();
+        assertLatitudeCodomain();
     }
 
-    private void assertLongitudeCodomain(double longitude) {
-        if (longitude < 0 || longitude > 360) {
+    private void assertLongitudeCodomain() {
+        if (this.longitude < 0 || this.longitude > 360) {
             throw new IllegalArgumentException("Longitude has to be between 0° and 360°");
         }
-    }
-
-    private void assertLatitudeCodomain(double latitude) {
-        if (latitude < 0 || latitude > 180) {
-            throw new IllegalArgumentException("Thetha has to be between 0° and 180°");
+        if (Double.isNaN(this.longitude)) {
+            throw new IllegalArgumentException("Longitude Point is NaN");
+        }
+        if (!Double.isFinite(this.longitude)) {
+            throw new IllegalArgumentException("Longitude Point is Infinitive");
         }
 
     }
 
-    private void assertRadiusCodomain(double radius) {
-        if (radius < 0) {
+    private void assertLatitudeCodomain() {
+        if (this.latitude < 0 || this.latitude > 180) {
+            throw new IllegalArgumentException("latitude has to be between 0° and 180°");
+        }
+        if (Double.isNaN(this.latitude)) {
+            throw new IllegalArgumentException("latitude Point is NaN");
+        }
+        if (!Double.isFinite(this.latitude)) {
+            throw new IllegalArgumentException("latitude Point is Infinitive");
+        }
+
+    }
+
+    private void assertRadiusCodomain() {
+        if (this.radius < 0) {
             throw new IllegalArgumentException("Radius cant be negative");
         }
+        if (Double.isNaN(this.radius)) {
+            throw new IllegalArgumentException("radius is NaN");
+        }
+        if (!Double.isFinite(this.radius)) {
+            throw new IllegalArgumentException("radius is Infinitive");
+        }
+
     }
 
 

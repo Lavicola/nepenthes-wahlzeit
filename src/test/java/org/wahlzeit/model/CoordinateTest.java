@@ -1,5 +1,6 @@
 package org.wahlzeit.model;
 
+import static java.lang.Double.NaN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -131,5 +132,20 @@ public class CoordinateTest {
     public void testNullArgument() {
         cartesianCoordinate0.equals(null);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void InvalidSphericCoordinateTest() {
+        new SphericCoordinate(-5, 1, 2);
+        new SphericCoordinate(5, 4000, 2);
+        new SphericCoordinate(NaN, 200, 2);
+        new SphericCoordinate(1.0 / 0, 200, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void InvalidCartesianCoordinateTest() {
+        new CartesianCoordinate(1, 1, NaN);
+        new CartesianCoordinate(1, 1, 1.0 / 0);
+    }
+
 
 }
