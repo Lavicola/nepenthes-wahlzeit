@@ -47,7 +47,7 @@ public abstract class AbstractCoordinate implements Coordinate {
     }
 
     @Override
-    public void assertIsExceptedObject(Object o) {
+    public void assertIsExpectedObject(Object o) {
         if (o instanceof Coordinate) {
             return;
         }

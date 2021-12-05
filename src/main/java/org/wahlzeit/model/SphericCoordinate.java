@@ -19,6 +19,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         this.radius = radius;
         this.longitude = longitude;
         this.latitude = latitude;
+        // you could argue if it would be better to make the check as a precondition (see report)
         assertClassInvariants();
     }
 
@@ -43,7 +44,7 @@ public class SphericCoordinate extends AbstractCoordinate {
     @Override
     public double getCentralAngle(Coordinate coordinate) {
         //Precondition: Object shall be not Null and must be an instance of Coordiante/CartesianCoordiante or SphericCoordinate
-        assertIsExceptedObject(coordinate);
+        assertIsExpectedObject(coordinate);
         assertNotNull(coordinate);
         SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
         //assertClassInvariants is  checked in the constructor
@@ -63,7 +64,7 @@ public class SphericCoordinate extends AbstractCoordinate {
                 2);
         double third_term = Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(theta_delta);
 
-
+        // You could check for postcondition, but i decided to not check it see report why.
         return Math.sqrt((first_term + second_term)) / third_term;
     }
 

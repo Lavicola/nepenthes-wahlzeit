@@ -23,6 +23,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
         this.x = x;
         this.y = y;
         this.z = z;
+        // you could argue if it would be better to make the check as a precondition (see report)
         assertClassInvariants();
     }
 
@@ -53,16 +54,16 @@ public class CartesianCoordinate extends AbstractCoordinate {
     public double getCartesianDistance(Coordinate coordinate) {
         // Precondition: argument shall not be null and must be of type Coordinate or subtype
         assertNotNull(coordinate);
-        assertIsExceptedObject(coordinate);
+        assertIsExpectedObject(coordinate);
 
-        CartesianCoordinate coordinate1 = this.asCartesianCoordinate();
         CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
         //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
 
-        double x_delta = Math.pow(coordinate2.getX() - coordinate1.getX(), 2);
-        double y_delta = Math.pow(coordinate2.getY() - coordinate1.getY(), 2);
-        double z_delta = Math.pow(coordinate2.getZ() - coordinate1.getZ(), 2);
+        double x_delta = Math.pow(coordinate2.getX() - this.getX(), 2);
+        double y_delta = Math.pow(coordinate2.getY() - this.getY(), 2);
+        double z_delta = Math.pow(coordinate2.getZ() - this.getZ(), 2);
 
+        // You could check for postcondition, but i decided to not check it see report why.
         return Math.sqrt(x_delta + y_delta + z_delta);
 
     }
@@ -80,7 +81,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
     public boolean equals(Object o) {
         // Precondition: object must be not null and must be of type Coordiante or subtype
         assertNotNull(o);
-        assertIsExceptedObject(o);
+        assertIsExpectedObject(o);
 
         return this.isEqual((Coordinate) o);
     }

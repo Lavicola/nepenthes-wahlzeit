@@ -29,7 +29,7 @@ public interface Coordinate {
 
     void assertNotNull(Object o);
 
-    void assertIsExceptedObject(Object o);
+    void assertIsExpectedObject(Object o);
 
     //check if the object space is valid
     private void assertClassInvariants() {
