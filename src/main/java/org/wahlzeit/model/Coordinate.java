@@ -20,21 +20,23 @@ public interface Coordinate {
      * But in the database only the Cartesian values will be stored.
      * That means in the readFrom Method the Coordiantes will be Converted to the corresponding class
      */
-     static Coordinate readFrom(ResultSet resultSet) throws SQLException {
-         return null;
+    static Coordinate readFrom(ResultSet resultSet) throws SQLException {
+        return null;
     }
 
-     void writeOn(ResultSet resultSet) throws SQLException;
+    void writeOn(ResultSet resultSet) throws SQLException;
 
 
-     void assertNotNull(Object o);
+    void assertNotNull(Object o);
 
-     void assertIsExceptedObject(Object o);
+    void assertIsExceptedObject(Object o);
 
-     //check if the object space is valid
-     private void assertClassInvariants(){
+    //check if the object space is valid
+    private void assertClassInvariants() {
 
-     };
+    }
+
+    ;
 
 
 }

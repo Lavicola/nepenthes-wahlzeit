@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class CartesianCoordinate extends AbstractCoordinate{
+public class CartesianCoordinate extends AbstractCoordinate {
 
     //immutable since it does not make sense to change the coordiantes later on.
     private final double x;
@@ -20,6 +20,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
      * @methodtype constructor
      */
     public CartesianCoordinate(double x, double y, double z) {
+        assertClassInvariants();
         this.x = x;
         this.y = y;
         this.z = z;
@@ -34,6 +35,8 @@ public class CartesianCoordinate extends AbstractCoordinate{
 
     @Override
     public SphericCoordinate asSphericCoordinate() throws ArithmeticException {
+        // Precondition: CartesianCoordinate must be valid
+        this.assertClassInvariants();
         // The Angle Unit is in Radian
         double radius = Math.sqrt((Math.pow(x, 2) +
                 Math.pow(y, 2) +
@@ -43,10 +46,8 @@ public class CartesianCoordinate extends AbstractCoordinate{
         }
         double phi = Math.atan2(y, x);
         double theta = Math.acos(z / radius);
-        SphericCoordinate sphericCoordinate = new SphericCoordinate(radius, phi, theta);
-        //check if the Cartesian Coordiante can be displayed as spheric coordiante. (Redundant since it will be checked in the constructor anyway but just for demonstration I did add it.
-        sphericCoordinate.assertClassInvariants();
-        return sphericCoordinate;
+        // Class invariants will be checked in the constructor
+        return new SphericCoordinate(radius, phi, theta);
     }
 
 
@@ -58,6 +59,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 
         CartesianCoordinate coordinate1 = this.asCartesianCoordinate();
         CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
+        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
 
         double x_delta = Math.pow(coordinate2.getX() - coordinate1.getX(), 2);
         double y_delta = Math.pow(coordinate2.getY() - coordinate1.getY(), 2);
@@ -70,6 +72,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 
     @Override
     public int hashCode() {
+        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
         CartesianCoordinate coordinate = this.asCartesianCoordinate();
         // Since EPSILON does allow inaccuracy we can´t use the full double value to hash.
         return Objects.hash(Math.round(coordinate.getX() * ROUND_POSITION), Math.round(coordinate.getY() * ROUND_POSITION), Math.round(coordinate.getZ() * ROUND_POSITION));
@@ -90,11 +93,11 @@ public class CartesianCoordinate extends AbstractCoordinate{
 
         CartesianCoordinate coordinate1 = coordinate.asCartesianCoordinate();
         CartesianCoordinate coordinate2 = this.asCartesianCoordinate();
+        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
 
         boolean isXEqual = checkEqualDouble(coordinate1.getX(), coordinate2.getX());
         boolean isYEqual = checkEqualDouble(coordinate1.getY(), coordinate2.getY());
         boolean isZEqual = checkEqualDouble(coordinate1.getZ(), coordinate2.getZ());
-
 
         if (isXEqual && isYEqual && isZEqual) {
             return true;
@@ -107,12 +110,9 @@ public class CartesianCoordinate extends AbstractCoordinate{
     }
 
 
-
-
-
-
     /**
      * The class itself knows it structure best, therefore read and write will be defined here and not in the abstract class
+     *
      * @param resultSet
      */
     public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
@@ -127,24 +127,35 @@ public class CartesianCoordinate extends AbstractCoordinate{
     public void writeOn(ResultSet resultSet) throws SQLException {
         assertNotNull(resultSet);
         CartesianCoordinate coordinate = this.asCartesianCoordinate();
+        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
         resultSet.updateDouble(COLUMN_X, coordinate.getX());
         resultSet.updateDouble(COLUMN_Y, coordinate.getY());
         resultSet.updateDouble(COLUMN_Z, coordinate.getZ());
     }
 
-    /**
-     * Since every number is valid in a cartesian coordinatesystem there is nothing to test here
-     */
+    // Since a double can be NaN or Infinitive we must check if thta´s the case if we convert coordinates to cartesian Coordinate
     @Override
     protected void assertClassInvariants() {
-
+        assertCoordinatePointCoDomain(this.x);
+        assertCoordinatePointCoDomain(this.y);
+        assertCoordinatePointCoDomain(this.z);
         return;
+    }
+
+    private void assertCoordinatePointCoDomain(double coordinate_point) {
+        if (Double.isNaN(coordinate_point)) {
+            throw new IllegalArgumentException("coordinate Point is NaN");
+        }
+        if (!Double.isFinite(coordinate_point)) {
+            throw new IllegalArgumentException("coordinate Point  Infinitive");
+        }
+
     }
 
 
     /**
-         * @methodtype get
-         */
+     * @methodtype get
+     */
     public double getX() {
         return this.x;
     }

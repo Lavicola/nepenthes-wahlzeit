@@ -93,6 +93,8 @@ public class CoordinateTest {
 
     @Test
     public void testHashCode() {
+        CartesianCoordinate co = new CartesianCoordinate(1, 2, 32);
+
         assertEquals(cartesianCoordinate0.hashCode(), sphericCoordinates0.hashCode());
         assertEquals(cartesianCoordinate1.hashCode(), sphericCoordinates1.hashCode());
     }

@@ -11,14 +11,12 @@ public class SphericCoordinate extends AbstractCoordinate {
 
 
     /**
-     * @param radius value can´t be negative
-     * @param longitude    value must be between 0 and 360
+     * @param radius    value can´t be negative
+     * @param longitude value must be between 0 and 360
      * @param latitude  value must be between 0 and 180
      */
     public SphericCoordinate(double radius, double longitude, double latitude) {
-        assertLongitudeCodomain(longitude);
-        assertRadiusCodomain(radius);
-        assertLongitudeCodomain(latitude);
+        assertClassInvariants();
         this.radius = radius;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -27,12 +25,12 @@ public class SphericCoordinate extends AbstractCoordinate {
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
-        // Precondition: SphericCoordinate must be valid
-        assertClassInvariants();
+        // Precondition: SphericCoordinate must be valid. Since only a valid SphericCoordinate can be created we don´t have to test it here again
         double x, y, z;
         x = radius * Math.sin(latitude) * Math.cos(longitude);
         y = radius * Math.sin(latitude) * Math.sin(longitude);
         z = radius * Math.cos(latitude);
+        //assertClassInvariants is  checked in the constructor
         return new CartesianCoordinate(x, y, z);
     }
 
@@ -49,10 +47,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         assertNotNull(coordinate);
         SphericCoordinate coordinate1 = this.asSphericCoordinate();
         SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
-        // after converting to spheric coordinate we check Classinvariants
-        coordinate1.assertClassInvariants();
-        coordinate2.assertClassInvariants();
-
+        //assertClassInvariants is  checked in the constructor
         double phi1 = coordinate1.getLongitude();
         double phi2 = coordinate2.getLongitude();
         double theta1 = coordinate1.getLatitude();
@@ -74,12 +69,10 @@ public class SphericCoordinate extends AbstractCoordinate {
     }
 
 
-
     public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
         // since the values are stored as Cartesian we must use the Cartestian function to the values of ot the database
         SphericCoordinate sphericCoordinate = CartesianCoordinate.readFrom(resultSet).asSphericCoordinate();
-        // check if the object can be described as SphericCoordiante
-        sphericCoordinate.assertClassInvariants();
+        //assertClassInvariants is  checked in the constructor
         return sphericCoordinate;
     }
 
@@ -109,6 +102,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         if (latitude < 0 || latitude > 180) {
             throw new IllegalArgumentException("Thetha has to be between 0° and 180°");
         }
+
     }
 
     private void assertRadiusCodomain(double radius) {

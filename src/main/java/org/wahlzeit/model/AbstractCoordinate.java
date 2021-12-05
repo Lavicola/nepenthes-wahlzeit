@@ -16,17 +16,11 @@ public abstract class AbstractCoordinate implements Coordinate {
 
     @Override
     public double getCartesianDistance(Coordinate coordinate) {
-        // Precondition: argument shall not be null
-        assertNotNull(coordinate);
-        assertIsExceptedObject(coordinate);
         return this.asCartesianCoordinate().getCartesianDistance(coordinate);
     }
 
     @Override
     public double getCentralAngle(Coordinate coordinate) {
-        //Precondition: Object shall be not Null and must be an instance of Coordiante/CartesianCoordiante or SphericCoordinate
-        assertNotNull(coordinate);
-        assertIsExceptedObject(coordinate);
         return this.asSphericCoordinate().getCentralAngle(coordinate);
     }
 
@@ -37,16 +31,11 @@ public abstract class AbstractCoordinate implements Coordinate {
 
     @Override
     public boolean equals(Object o) {
-        //Precondition: Object shall be not Null and must be an instance of Coordiante/CartesianCoordiante or SphericCoordinate
-        assertNotNull(o);
-        assertIsExceptedObject(o);
-        return this.asCartesianCoordinate().isEqual((Coordinate) o);
+        return this.asCartesianCoordinate().equals((Coordinate) o);
     }
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
-        assertNotNull(coordinate);
-        assertIsExceptedObject(coordinate);
         return this.asCartesianCoordinate().isEqual(coordinate);
     }
 
