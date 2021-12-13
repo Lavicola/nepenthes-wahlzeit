@@ -15,12 +15,12 @@ public abstract class AbstractCoordinate implements Coordinate {
 
 
     @Override
-    public double getCartesianDistance(Coordinate coordinate) {
+    public double getCartesianDistance(Coordinate coordinate) throws InvalidCoordinateException {
         return this.asCartesianCoordinate().getCartesianDistance(coordinate);
     }
 
     @Override
-    public double getCentralAngle(Coordinate coordinate) {
+    public double getCentralAngle(Coordinate coordinate) throws InvalidCoordinateException {
         return this.asSphericCoordinate().getCentralAngle(coordinate);
     }
 

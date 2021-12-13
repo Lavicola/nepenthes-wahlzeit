@@ -42,30 +42,42 @@ public class SphericCoordinate extends AbstractCoordinate {
 
 
     @Override
-    public double getCentralAngle(Coordinate coordinate) {
-        //Precondition: Object shall be not Null and must be an instance of Coordiante/CartesianCoordiante or SphericCoordinate
-        assertIsExpectedObject(coordinate);
-        assertNotNull(coordinate);
-        SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
-        //assertClassInvariants is  checked in the constructor
-        double phi1 = this.getLongitude();
-        double phi2 = coordinate2.getLongitude();
-        double theta1 = this.getLatitude();
-        double thehta2 = coordinate2.getLatitude();
-        double theta_delta = theta1 - thehta2;
+    public double getCentralAngle(Coordinate coordinate) throws InvalidCoordinateException {
+        try{
+            //Precondition: Object shall be not Null and must be an instance of Coordiante/CartesianCoordiante or SphericCoordinate
+            assertIsExpectedObject(coordinate);
+            assertNotNull(coordinate);
+            SphericCoordinate coordinate2 = coordinate.asSphericCoordinate();
+            double phi1 = this.getLongitude();
+            double phi2 = coordinate2.getLongitude();
+            double theta1 = this.getLatitude();
+            double thehta2 = coordinate2.getLatitude();
+            double theta_delta = theta1 - thehta2;
 
-        double first_term = Math.pow(
-                Math.cos(phi2) *
-                        Math.sin(theta_delta),
-                2);
+            double first_term = Math.pow(
+                    Math.cos(phi2) *
+                            Math.sin(theta_delta),
+                    2);
 
-        double second_term = Math.pow(Math.cos(phi1) * Math.sin(phi2) -
-                        Math.sin(phi1) * Math.cos(phi2) * Math.cos(theta_delta),
-                2);
-        double third_term = Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(theta_delta);
+            double second_term = Math.pow(Math.cos(phi1) * Math.sin(phi2) -
+                            Math.sin(phi1) * Math.cos(phi2) * Math.cos(theta_delta),
+                    2);
+            double third_term = Math.sin(phi1) * Math.sin(phi2) + Math.cos(phi1) * Math.cos(phi2) * Math.cos(theta_delta);
 
-        // You could check for postcondition, but i decided to not check it see report why.
-        return Math.sqrt((first_term + second_term)) / third_term;
+            double result = Math.sqrt((first_term + second_term)) / third_term;
+            // Postcondition between 0 and 360 (0 and 2 * pi)
+            assertValidCentralAngle(result);
+            return result;
+
+        }catch (ArithmeticException | NullPointerException exception){
+            throw new InvalidCoordinateException(exception.getMessage());
+        }
+    }
+
+    private void assertValidCentralAngle(double result) {
+        if( !(result > 0 && result <= 360) ){
+            throw new IllegalArgumentException("central Angle must be bigger than 0 and smaller than 360 ");
+        }
     }
 
 

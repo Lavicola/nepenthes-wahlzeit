@@ -101,13 +101,13 @@ public class CoordinateTest {
     }
 
     @Test
-    public void getCartesianDistanceTest() {
+    public void getCartesianDistanceTest() throws InvalidCoordinateException {
         assertEquals(0, sphericCoordinates0.getCartesianDistance(cartesianCoordinate0), AbstractCoordinate.EPSILON);
         assertEquals(10, sphericCoordinates1.getCartesianDistance(new CartesianCoordinate(0, 0, 0)), AbstractCoordinate.EPSILON);
     }
 
     @Test
-    public void getCentralAngle() {
+    public void getCentralAngle() throws InvalidCoordinateException {
         assertEquals(0.5496167631033911, cartesianCoordinate0.getCentralAngle(cartesianCoordinate1), AbstractCoordinate.EPSILON);
     }
 

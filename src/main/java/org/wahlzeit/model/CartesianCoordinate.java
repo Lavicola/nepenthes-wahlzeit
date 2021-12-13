@@ -29,7 +29,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
 
     @Override
-    public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
+     public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
         return this;
     }
 
@@ -51,30 +51,31 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
 
     @Override
-    public double getCartesianDistance(Coordinate coordinate) {
-        // Precondition: argument shall not be null and must be of type Coordinate or subtype
-        assertNotNull(coordinate);
-        assertIsExpectedObject(coordinate);
+    public double getCartesianDistance(Coordinate coordinate) throws InvalidCoordinateException {
+        try{
+            // Precondition: argument shall not be null and must be of type Coordinate or subtype
+            assertNotNull(coordinate);
+            assertIsExpectedObject(coordinate);
+            CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
 
-        CartesianCoordinate coordinate2 = coordinate.asCartesianCoordinate();
-        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
+            double x_delta = Math.pow(coordinate2.getX() - this.getX(), 2);
+            double y_delta = Math.pow(coordinate2.getY() - this.getY(), 2);
+            double z_delta = Math.pow(coordinate2.getZ() - this.getZ(), 2);
 
-        double x_delta = Math.pow(coordinate2.getX() - this.getX(), 2);
-        double y_delta = Math.pow(coordinate2.getY() - this.getY(), 2);
-        double z_delta = Math.pow(coordinate2.getZ() - this.getZ(), 2);
-
-        // You could check for postcondition, but i decided to not check it see report why.
-        return Math.sqrt(x_delta + y_delta + z_delta);
+            // You could check for postcondition, but i decided to not check it see report why.
+            return Math.sqrt(x_delta + y_delta + z_delta);
+        }catch (ArithmeticException | NullPointerException exception){
+            throw new InvalidCoordinateException(exception.getMessage());
+        }
 
     }
 
-
     @Override
-    public int hashCode() {
+    public int hashCode()  {
         //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
         CartesianCoordinate coordinate = this.asCartesianCoordinate();
-        // Since EPSILON does allow inaccuracy we can´t use the full double value to hash.
         return Objects.hash(Math.round(coordinate.getX() * ROUND_POSITION), Math.round(coordinate.getY() * ROUND_POSITION), Math.round(coordinate.getZ() * ROUND_POSITION));
+        // Since EPSILON does allow inaccuracy we can´t use the full double value to hash.
     }
 
     @Override
@@ -88,9 +89,15 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
-        assertNotNull(coordinate);
+        CartesianCoordinate coordinate1;
+        try{
+            assertNotNull(coordinate);
+            coordinate1 = coordinate.asCartesianCoordinate();
+        }catch (NullPointerException | IllegalArgumentException exception){
+            // if the Argument Coordinate is Null or can´t be converted to Cartesian they can´t be equal
+            return false;
+        }
 
-        CartesianCoordinate coordinate1 = coordinate.asCartesianCoordinate();
         //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
 
         boolean isXEqual = checkEqualDouble(coordinate1.getX(), this.getX());
@@ -114,21 +121,38 @@ public class CartesianCoordinate extends AbstractCoordinate {
      * @param resultSet
      */
     public static Coordinate readFrom(ResultSet resultSet) throws SQLException {
-        double x = resultSet.getDouble(COLUMN_X);
-        if (!resultSet.wasNull()) {
-            return new CartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
+        // If we could not retrieve the values we will try it at max three times
+        for (int tries = 0; tries < 3; tries++) {
+            try {
+                double x = resultSet.getDouble(COLUMN_X);
+                if (!resultSet.wasNull()) {
+                    return new CartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
+                }
+            } catch (SQLException e) {
+                //time.sleep would make sense here, but I think that would be exaggerated for our purpose
+            }
         }
-        return null;
-    }
+        throw new SQLException("Could not retrieve Coordinates out of database!");
 
+    }
     @Override
     public void writeOn(ResultSet resultSet) throws SQLException {
         assertNotNull(resultSet);
         CartesianCoordinate coordinate = this.asCartesianCoordinate();
-        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
-        resultSet.updateDouble(COLUMN_X, coordinate.getX());
-        resultSet.updateDouble(COLUMN_Y, coordinate.getY());
-        resultSet.updateDouble(COLUMN_Z, coordinate.getZ());
+        // try writing values three times else give up
+        // instead try catch every written value I combined them even if it mean some values might get written multiple times
+        for (int tries = 0; tries < 3; tries++) {
+            try {
+                resultSet.updateDouble(COLUMN_X, coordinate.getX());
+                resultSet.updateDouble(COLUMN_Y, coordinate.getY());
+                resultSet.updateDouble(COLUMN_Z, coordinate.getZ());
+                //if no error occurred we can leave
+                return;
+            } catch (SQLException e) {
+                //time.sleep would make sense here, but I think that would be exaggerated for our purpose
+            }
+        }
+        throw new SQLException("Could not Write values in Database");
     }
 
     // Since a double can be NaN or Infinitive we must check if thta´s the case if we convert coordinates to cartesian Coordinate

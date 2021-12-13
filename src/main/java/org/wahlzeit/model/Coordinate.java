@@ -7,11 +7,11 @@ public interface Coordinate {
 
     CartesianCoordinate asCartesianCoordinate() throws ArithmeticException;
 
-    double getCartesianDistance(Coordinate coordinate);
+    double getCartesianDistance(Coordinate coordinate) throws InvalidCoordinateException;
 
     SphericCoordinate asSphericCoordinate() throws ArithmeticException;
 
-    double getCentralAngle(Coordinate coordinate);
+    double getCentralAngle(Coordinate coordinate) throws InvalidCoordinateException;
 
     boolean isEqual(Coordinate coordinate);
 
