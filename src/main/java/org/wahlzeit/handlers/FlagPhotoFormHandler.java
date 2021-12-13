@@ -71,8 +71,12 @@ public class FlagPhotoFormHandler extends AbstractWebFormHandler {
 		Photo photo = PhotoManager.getPhoto(id);
 		photo.setStatus(photo.getStatus().asFlagged(true));
 		PhotoManager pm = PhotoManager.getInstance();
-		pm.savePhoto(photo);
-		
+		try {
+			pm.savePhoto(photo);
+		} catch (PersistenceException e) {
+			// do something useful with the information we just gained
+			return PartUtil.SHOW_NOTE_PAGE_NAME;
+		}
 		PhotoCase photoCase = new PhotoCase(photo);
 		photoCase.setFlagger(flagger);
 		photoCase.setReason(reason);

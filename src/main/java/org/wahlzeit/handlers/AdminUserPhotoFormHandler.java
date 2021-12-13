@@ -52,8 +52,13 @@ public class AdminUserPhotoFormHandler extends AbstractWebFormHandler {
 		photo.setStatus(PhotoStatus.getFromString(status));
 
 		PhotoManager pm = PhotoManager.getInstance();
-		pm.savePhoto(photo);
-		
+		try {
+			pm.savePhoto(photo);
+		} catch (PersistenceException e) {
+		// do something useful with the information we just gained
+			return PartUtil.SHOW_ADMIN_PAGE_NAME;
+		}
+
 		StringBuffer sb = UserLog.createActionEntry("AdminUserPhoto");
 		UserLog.addUpdatedObject(sb, "Photo", photo.getId().asString());
 		UserLog.log(sb);

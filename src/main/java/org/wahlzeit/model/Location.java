@@ -38,17 +38,14 @@ public class Location {
 
 
 	public void writeOn(ResultSet rset) throws SQLException {
+            assertNotNull(rset);
             cartesianCoordinate.writeOn(rset);
     }
 
 	public Location readFrom(ResultSet rset) throws SQLException {
         CartesianCoordinate cartesianCoordinate = this.cartesianCoordinate.readFrom(rset).asCartesianCoordinate();
-        if(cartesianCoordinate == null){
-            return null;
-        }else{
-            return new Location(cartesianCoordinate);
-        }
-        
+        assertNotNull(cartesianCoordinate);
+        return new Location(cartesianCoordinate);
     }
     
 	/**
@@ -69,5 +66,12 @@ public class Location {
         return cartesianCoordinate.hashCode();
     }
 
-    
+
+    void assertNotNull(Object o){
+        if(o == null){
+            throw new IllegalArgumentException("Argument is Null");
+        }
+    }
+
+
 }

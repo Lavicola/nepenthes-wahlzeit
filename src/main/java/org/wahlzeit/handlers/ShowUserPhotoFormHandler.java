@@ -77,7 +77,11 @@ public class ShowUserPhotoFormHandler extends AbstractWebFormHandler {
 			UserLog.logPerformedAction("SelectUserPhoto");
 		} else if (us.isFormType(args, "delete")) {
 			photo.setStatus(photo.getStatus().asDeleted(true));
-			PhotoManager.getInstance().savePhoto(photo);
+			try {
+				PhotoManager.getInstance().savePhoto(photo);
+			} catch (PersistenceException e) {
+				// do something useful with the information we just gained
+			}
 			if (user.getUserPhoto() == photo) {
 				user.setUserPhoto(null);
 			}

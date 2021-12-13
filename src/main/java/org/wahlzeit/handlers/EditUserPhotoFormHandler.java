@@ -76,8 +76,13 @@ public class EditUserPhotoFormHandler extends AbstractWebFormHandler {
 		PhotoStatus ps = photo.getStatus().asInvisible(isInvisible);
 		photo.setStatus(ps);
 
-		pm.savePhoto(photo);
-		
+		try {
+			pm.savePhoto(photo);
+		} catch (PersistenceException e) {
+			// do something useful with the information we just gained
+			return PartUtil.SHOW_NOTE_PAGE_NAME;
+		}
+
 		StringBuffer sb = UserLog.createActionEntry("EditUserPhoto");
 		UserLog.addUpdatedObject(sb, "Photo", photo.getId().asString());
 		UserLog.log(sb);

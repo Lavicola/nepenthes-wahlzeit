@@ -15,6 +15,7 @@ import org.wahlzeit.services.*;
 /**
  * A photo manager provides access to and manages photos.
  */
+// Photomanager is our boundary therefore this class should be responsible for try and catch unchecked exceptions and wrap them in a custom exception in Order to force other to take care of the exceptions.
 public class PhotoManager extends ObjectManager {
 	
 	/**
@@ -166,6 +167,7 @@ public class PhotoManager extends ObjectManager {
 			}
 		} catch (SQLException sex) {
 			SysLog.logThrowable(sex);
+
 		}
 		
 		SysLog.logSysInfo("loaded all photos");
@@ -174,19 +176,20 @@ public class PhotoManager extends ObjectManager {
 	/**
 	 * 
 	 */
-	public void savePhoto(Photo photo) {
+	public void savePhoto(Photo photo) throws PersistenceException {
 		try {
 			PreparedStatement stmt = getUpdatingStatement("SELECT * FROM photos WHERE id = ?");
 			updateObject(photo, stmt);
 		} catch (SQLException sex) {
 			SysLog.logThrowable(sex);
+			throw new PersistenceException(sex.getMessage());
 		}
 	}
 	
 	/**
 	 * 
 	 */
-	public void savePhotos() {
+	public void savePhotos()  {
 		try {
 			PreparedStatement stmt = getUpdatingStatement("SELECT * FROM photos WHERE id = ?");
 			updateObjects(photoCache.values(), stmt);

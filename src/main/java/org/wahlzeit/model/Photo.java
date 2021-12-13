@@ -124,6 +124,7 @@ public class Photo extends DataObject {
 	public Photo(ResultSet rset,Location location) throws SQLException {
 		this.location = location;
 		readFrom(rset);
+		assertClassInvariant();
 	}
 
 	/**
@@ -142,7 +143,7 @@ public class Photo extends DataObject {
 
 		ownerId = rset.getInt("owner_id");
 		ownerName = rset.getString("owner_name");
-		
+
 		ownerNotifyAboutPraise = rset.getBoolean("owner_notify_about_praise");
 		ownerEmailAddress = EmailAddress.getFromString(rset.getString("owner_email_address"));
 		ownerLanguage = Language.getFromInt(rset.getInt("owner_language"));
@@ -163,7 +164,7 @@ public class Photo extends DataObject {
 			location = location.readFrom(rset);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -181,7 +182,7 @@ public class Photo extends DataObject {
 		rset.updateInt("status", status.asInt());
 		rset.updateInt("praise_sum", praiseSum);
 		rset.updateInt("no_votes", noVotes);
-		rset.updateLong("creation_time", creationTime);		
+		rset.updateLong("creation_time", creationTime);
 		if(location != null){
 			location.writeOn(rset);
 		}
@@ -501,6 +502,17 @@ public class Photo extends DataObject {
 		return this.location;
 	}
 
+
+	void assertNotNull(Object o){
+		if(o == null){
+			throw new IllegalArgumentException("Argument can´t be null");
+		}
+	}
+
+	protected void assertClassInvariant(){
+		// normally we would check every attribute if it is a valid value. See example in NepenthesPhoto
+		return;
+	}
 
 
 }

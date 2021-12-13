@@ -10,7 +10,7 @@ public class NepenthesPhoto extends Photo {
     private boolean isHybrid;
 
 
-    	/**
+	/**
 	 * 
 	 */
 	public NepenthesPhoto() {
@@ -30,10 +30,7 @@ public class NepenthesPhoto extends Photo {
 	 * @methodtype constructor
 	 */
 	public NepenthesPhoto(ResultSet rset) throws SQLException {
-		super.readFrom(rset);
-        /*
         readFrom(rset);
-        */
 	}
 
 	/**
@@ -42,25 +39,26 @@ public class NepenthesPhoto extends Photo {
 	 */
 	public NepenthesPhoto(ResultSet rset,Location location) throws SQLException {
 		super(rset,location);
+		readFrom(rset);
+		assertClassInvariant();
 	}
 
     public void readFrom(ResultSet rset) throws SQLException {
+		assertNotNull(rset);
 		super.readFrom(rset);
-        /*
         name = rset.getString("name");
         altitude = rset.getInt("altitude");
         isHybrid = rset.getBoolean("isHybrid");
-        */
-        
+
 	}
 	
     public void writeOn(ResultSet rset) throws SQLException {
+		assertNotNull(rset);
 		super.writeOn(rset);
-        /*
         rset.updateString("name", name);
 		rset.updateInt("altitude", altitude);
 		rset.updateBoolean("isHybrid", isHybrid);
-        */
+
 	}
 	/**
 	 * 
@@ -99,6 +97,7 @@ public class NepenthesPhoto extends Photo {
 	 */
     public void setAltitude(int altitude){
         this.altitude = altitude;
+		assertClassInvariant();
     }
 
 	/**
@@ -110,5 +109,15 @@ public class NepenthesPhoto extends Photo {
     }
 
 
+	@Override
+	protected void assertClassInvariant(){
+		if(this.altitude < 0){
+			throw new IllegalArgumentException("altitude can´t be zero");
+		}
+		if(this.name.isBlank() || this.name.isEmpty()){
+			throw new IllegalArgumentException("name can´t be empty or blank!");
+		}
+		return;
+	}
     
 }
