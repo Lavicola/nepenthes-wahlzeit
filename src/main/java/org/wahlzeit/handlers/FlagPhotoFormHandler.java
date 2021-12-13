@@ -75,6 +75,8 @@ public class FlagPhotoFormHandler extends AbstractWebFormHandler {
 			pm.savePhoto(photo);
 		} catch (PersistenceException e) {
 			// do something useful with the information we just gained
+			us.setMessage(us.cfg().getPhotoUploadFailed());
+
 			return PartUtil.SHOW_NOTE_PAGE_NAME;
 		}
 		PhotoCase photoCase = new PhotoCase(photo);

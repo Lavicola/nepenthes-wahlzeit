@@ -80,6 +80,8 @@ public class ShowUserPhotoFormHandler extends AbstractWebFormHandler {
 			try {
 				PhotoManager.getInstance().savePhoto(photo);
 			} catch (PersistenceException e) {
+				us.setMessage(us.cfg().getPhotoUploadFailed());
+
 				// do something useful with the information we just gained
 			}
 			if (user.getUserPhoto() == photo) {
