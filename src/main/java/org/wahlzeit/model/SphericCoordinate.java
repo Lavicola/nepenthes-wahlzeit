@@ -21,6 +21,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         this.latitude = latitude;
         // you could argue if it would be better to make the check as a precondition (see report)
         assertClassInvariants();
+        shared_coordinates.addCoordinate(this);
     }
 
 
@@ -143,7 +144,10 @@ public class SphericCoordinate extends AbstractCoordinate {
 
     }
 
-
+    @Override
+    public int getArrayIndex() {
+        return ARRAY_INDEX.SPHERIC.ordinal();
+    }
     public double getLongitude() {
         return longitude;
     }

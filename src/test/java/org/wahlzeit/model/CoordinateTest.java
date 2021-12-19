@@ -147,4 +147,5 @@ public class CoordinateTest {
         new CartesianCoordinate(1, 1, 1.0 / 0);
     }
 
+
 }

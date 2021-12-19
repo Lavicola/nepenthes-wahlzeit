@@ -2,7 +2,7 @@ package org.wahlzeit.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
+import java.util.*;
 
 public class CartesianCoordinate extends AbstractCoordinate {
 
@@ -25,6 +25,8 @@ public class CartesianCoordinate extends AbstractCoordinate {
         this.z = z;
         // you could argue if it would be better to make the check as a precondition (see report)
         assertClassInvariants();
+        //add to shared_object list
+        shared_coordinates.addCoordinate(this);
     }
 
 
@@ -162,6 +164,11 @@ public class CartesianCoordinate extends AbstractCoordinate {
         assertCoordinatePointCoDomain(this.y);
         assertCoordinatePointCoDomain(this.z);
         return;
+    }
+
+    @Override
+    public int getArrayIndex() {
+        return ARRAY_INDEX.CARTESIAN.ordinal();
     }
 
     private void assertCoordinatePointCoDomain(double coordinate_point) {

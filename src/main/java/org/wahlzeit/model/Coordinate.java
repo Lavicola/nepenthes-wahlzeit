@@ -26,7 +26,6 @@ public interface Coordinate {
 
     void writeOn(ResultSet resultSet) throws SQLException;
 
-
     void assertNotNull(Object o);
 
     void assertIsExpectedObject(Object o);
@@ -36,7 +35,16 @@ public interface Coordinate {
 
     }
 
-    ;
+    // returns the array index which is used for the sharedCoordinateObject
+    enum ARRAY_INDEX{
+        CARTESIAN(0),
+        SPHERIC(1);
+
+        ARRAY_INDEX(int i) {
+        }
+    }
+    int getArrayIndex();
+
 
 
 }
