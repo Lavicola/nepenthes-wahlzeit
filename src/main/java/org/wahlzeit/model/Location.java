@@ -17,7 +17,7 @@ public class Location {
 	 * @methodtype constructor
 	 */
     public Location(CartesianCoordinate cartesianCoordinate){
-        this.cartesianCoordinate = new CartesianCoordinate(cartesianCoordinate.getX(), cartesianCoordinate.getY(), cartesianCoordinate.getZ());
+        this.cartesianCoordinate = CartesianCoordinate.getCartesianCoordinate(cartesianCoordinate.getX(), cartesianCoordinate.getY(), cartesianCoordinate.getZ());
     }
 
 	/**
@@ -25,7 +25,7 @@ public class Location {
 	 * @methodtype constructor
 	 */
     public Location(double x,double y, double z){
-        this.cartesianCoordinate = new CartesianCoordinate(x,y,z);
+        this.cartesianCoordinate = CartesianCoordinate.getCartesianCoordinate(x,y,z);
     }
 
 	/**

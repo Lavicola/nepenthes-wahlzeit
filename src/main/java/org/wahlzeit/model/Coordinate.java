@@ -15,6 +15,8 @@ public interface Coordinate {
 
     boolean isEqual(Coordinate coordinate);
 
+    boolean isSame(Object o);
+
     /**
      * Adding readFrom and writeOn here makes it possible to from SphericCoordinate as well
      * But in the database only the Cartesian values will be stored.

@@ -8,7 +8,7 @@ public class SharedObjectTest {
     @Test
     public void addCoordinateTest(){
 
-        CartesianCoordinate cartesian = new CartesianCoordinate(1, 1, 1);
+        CartesianCoordinate cartesian = CartesianCoordinate.getCartesianCoordinate(1, 1, 1);
         SharedCoordinatesObject test = SharedCoordinatesObject.getInstance();
 
         test.addCoordinate(cartesian);

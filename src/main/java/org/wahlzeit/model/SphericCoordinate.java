@@ -15,13 +15,18 @@ public class SphericCoordinate extends AbstractCoordinate {
      * @param longitude value must be between 0 and 360
      * @param latitude  value must be between 0 and 180
      */
-    public SphericCoordinate(double radius, double longitude, double latitude) {
+    private SphericCoordinate(double radius, double longitude, double latitude) {
         this.radius = radius;
         this.longitude = longitude;
         this.latitude = latitude;
         // you could argue if it would be better to make the check as a precondition (see report)
         assertClassInvariants();
-        shared_coordinates.addCoordinate(this);
+    }
+
+    //calling the constructor results always in a new object therefore the object must be created via a static in order to be able to actually return an already existing Object
+    public static SphericCoordinate getSphericCoordinate(double radius, double longitude, double latitude){
+        //add to shared_coordinate list and return the instance
+        return shared_coordinates.getCoordinateInstance(new SphericCoordinate(radius, longitude, latitude));
     }
 
 
@@ -33,7 +38,7 @@ public class SphericCoordinate extends AbstractCoordinate {
         y = radius * Math.sin(latitude) * Math.sin(longitude);
         z = radius * Math.cos(latitude);
         //assertClassInvariants is  checked in the constructor
-        return new CartesianCoordinate(x, y, z);
+        return shared_coordinates.getCoordinateInstance(CartesianCoordinate.getCartesianCoordinate(x, y, z)) ;
     }
 
     @Override

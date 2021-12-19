@@ -33,11 +33,11 @@ public class CoordinateTest {
     @Before
     public void setUp() {
         //equal
-        cartesianCoordinate0 = new CartesianCoordinate(3, 3, 3);
-        sphericCoordinates0 = new SphericCoordinate(5.196152422706632, 0.7853981633974483, 0.9553166181245093);
+        cartesianCoordinate0 = CartesianCoordinate.getCartesianCoordinate(3, 3, 3);
+        sphericCoordinates0 = SphericCoordinate.getSphericCoordinate(5.196152422706632, 0.7853981633974483, 0.9553166181245093);
         //equal
-        sphericCoordinates1 = new SphericCoordinate(10, 0.3, 0.8);
-        cartesianCoordinate1 = new CartesianCoordinate(6.853164493328191, 2.1199322023239766, 6.967067093471654);
+        sphericCoordinates1 = SphericCoordinate.getSphericCoordinate(10, 0.3, 0.8);
+        cartesianCoordinate1 = CartesianCoordinate.getCartesianCoordinate(6.853164493328191, 2.1199322023239766, 6.967067093471654);
 
 
         try {
@@ -94,7 +94,7 @@ public class CoordinateTest {
 
     @Test
     public void testHashCode() {
-        CartesianCoordinate co = new CartesianCoordinate(1, 2, 32);
+        CartesianCoordinate co = CartesianCoordinate.getCartesianCoordinate(1, 2, 32);
 
         assertEquals(cartesianCoordinate0.hashCode(), sphericCoordinates0.hashCode());
         assertEquals(cartesianCoordinate1.hashCode(), sphericCoordinates1.hashCode());
@@ -103,7 +103,7 @@ public class CoordinateTest {
     @Test
     public void getCartesianDistanceTest() throws InvalidCoordinateException {
         assertEquals(0, sphericCoordinates0.getCartesianDistance(cartesianCoordinate0), AbstractCoordinate.EPSILON);
-        assertEquals(10, sphericCoordinates1.getCartesianDistance(new CartesianCoordinate(0, 0, 0)), AbstractCoordinate.EPSILON);
+        assertEquals(10, sphericCoordinates1.getCartesianDistance(CartesianCoordinate.getCartesianCoordinate(0, 0, 0)), AbstractCoordinate.EPSILON);
     }
 
     @Test
@@ -135,16 +135,16 @@ public class CoordinateTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void InvalidSphericCoordinateTest() {
-        new SphericCoordinate(-5, 1, 2);
-        new SphericCoordinate(5, 4000, 2);
-        new SphericCoordinate(NaN, 200, 2);
-        new SphericCoordinate(1.0 / 0, 200, 2);
+        SphericCoordinate.getSphericCoordinate(-5, 1, 2);
+        SphericCoordinate.getSphericCoordinate(5, 4000, 2);
+        SphericCoordinate.getSphericCoordinate(NaN, 200, 2);
+        SphericCoordinate.getSphericCoordinate(1.0 / 0, 200, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void InvalidCartesianCoordinateTest() {
-        new CartesianCoordinate(1, 1, NaN);
-        new CartesianCoordinate(1, 1, 1.0 / 0);
+        CartesianCoordinate.getCartesianCoordinate(1, 1, NaN);
+        CartesianCoordinate.getCartesianCoordinate(1, 1, 1.0 / 0);
     }
 
 

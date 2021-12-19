@@ -3,7 +3,7 @@ package org.wahlzeit.model;
 public abstract class AbstractCoordinate implements Coordinate {
 
 
-    public SharedCoordinatesObject shared_coordinates = SharedCoordinatesObject.getInstance();
+    static SharedCoordinatesObject shared_coordinates = SharedCoordinatesObject.getInstance();
 
     public final static int PRECISION = 5;
     public final static double EPSILON = Math.pow(10, -PRECISION);
@@ -15,7 +15,6 @@ public abstract class AbstractCoordinate implements Coordinate {
 
     @Override
     public abstract SphericCoordinate asSphericCoordinate() throws ArithmeticException;
-
 
     @Override
     public double getCartesianDistance(Coordinate coordinate) throws InvalidCoordinateException {
@@ -30,6 +29,11 @@ public abstract class AbstractCoordinate implements Coordinate {
     @Override
     public int hashCode() {
         return this.asCartesianCoordinate().hashCode();
+    }
+
+    @Override
+    public boolean isSame(Object o){
+        return this.asCartesianCoordinate().isSame(o);
     }
 
     @Override

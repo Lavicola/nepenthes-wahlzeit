@@ -19,16 +19,19 @@ public class CartesianCoordinate extends AbstractCoordinate {
     /**
      * @methodtype constructor
      */
-    public CartesianCoordinate(double x, double y, double z){
+    private CartesianCoordinate(double x, double y, double z){
         this.x = x;
         this.y = y;
         this.z = z;
         // you could argue if it would be better to make the check as a precondition (see report)
         assertClassInvariants();
-        //add to shared_object list
-        shared_coordinates.addCoordinate(this);
     }
 
+    //calling the constructor results always in a new object therefore the object must be created via a static in order to be able to actually return an already existing Object
+    public static CartesianCoordinate getCartesianCoordinate(double x, double y, double z){
+        //add to shared_coordinate list and return the instance
+        return shared_coordinates.getCoordinateInstance(new CartesianCoordinate(x, y, z));
+    }
 
     @Override
      public CartesianCoordinate asCartesianCoordinate() throws ArithmeticException {
@@ -43,12 +46,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
                 Math.pow(y, 2) +
                 Math.pow(z, 2)));
         if (radius <= EPSILON) {
-            return new SphericCoordinate(0, 0, 0);
+            return SphericCoordinate.getSphericCoordinate(0, 0, 0);
         }
         double phi = Math.atan2(y, x);
         double theta = Math.acos(z / radius);
         // Class invariants will be checked in the constructor
-        return new SphericCoordinate(radius, phi, theta);
+        return shared_coordinates.getCoordinateInstance(SphericCoordinate.getSphericCoordinate(radius, phi, theta));
     }
 
 
@@ -91,26 +94,18 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
-        CartesianCoordinate coordinate1;
-        try{
-            assertNotNull(coordinate);
-            coordinate1 = coordinate.asCartesianCoordinate();
-        }catch (NullPointerException | IllegalArgumentException exception){
-            // if the Argument Coordinate is Null or can´t be converted to Cartesian they can´t be equal
-            return false;
-        }
-
-        //Classinvariants is checked in both constructors, therefore it is not necessary to check it here again.
-
-        boolean isXEqual = checkEqualDouble(coordinate1.getX(), this.getX());
-        boolean isYEqual = checkEqualDouble(coordinate1.getY(), this.getY());
-        boolean isZEqual = checkEqualDouble(coordinate1.getZ(), this.getZ());
-
-        if (isXEqual && isYEqual && isZEqual) {
-            return true;
-        }
-        return false;
+        return isSame(coordinate);
     }
+
+    @Override
+    public boolean isSame(Object o){
+        //since we must cast to cartesian we check the preconditions first
+        assertNotNull(o);
+        assertIsExpectedObject(o);
+
+        return this == ((Coordinate) o).asCartesianCoordinate();
+    }
+
 
     private boolean checkEqualDouble(double d1, double d2) {
         return EPSILON > Math.abs(d1 - d2);
@@ -128,7 +123,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
             try {
                 double x = resultSet.getDouble(COLUMN_X);
                 if (!resultSet.wasNull()) {
-                    return new CartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
+                    return CartesianCoordinate.getCartesianCoordinate(x, resultSet.getDouble(COLUMN_Y), resultSet.getDouble(COLUMN_Z));
                 }
             } catch (SQLException e) {
                 //time.sleep would make sense here, but I think that would be exaggerated for our purpose

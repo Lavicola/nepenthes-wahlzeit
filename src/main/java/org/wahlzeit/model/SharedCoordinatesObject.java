@@ -21,8 +21,6 @@ public class SharedCoordinatesObject {
         return instance;
     }
 
-
-
     /**
      * This Method returns an instance of a Cartesian Coordinate Object.
      * It the object itself is not already stored in the Hashmap it will store the object and will return the new stored object
@@ -64,7 +62,7 @@ public class SharedCoordinatesObject {
         if(! checkIfCoordinateEntryExists(coordinate)){
             doAddCoordinateEntry(coordinate);
         }
-        // Coordiante exists already
+        // Coordinate exists already
         if(! checkIfCoordinateExists(coordinate)){
             doAddCoordinate(coordinate);
         }
