@@ -1,22 +1,28 @@
 package org.wahlzeit.model;
 
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Vector;
 
-public class SharedCoordinatesObject {
 
-    private static SharedCoordinatesObject instance;
+/***
+ * This class stores every created Object in a Hashmap.
+ * It is implemented as a Singleton and used from Cartesian and Spheric in order to  store every created Object in one global Hashmap
+ */
 
+public class SharedCoordinates {
+
+    private static SharedCoordinates instance;
+
+    // increase values in case of a new coordinate system
     private static int NUMBER_OF_SUPPORTED_COORDINATES = 2;
+    // the shared global hashmap for cartesian and spheric
     private HashMap<Integer, Coordinate[] > coordinates_value_objects = new HashMap<>();
 
+    //don´t allow to create an instance
+    private SharedCoordinates(){}
 
-    private SharedCoordinatesObject(){}
-
-    public static SharedCoordinatesObject getInstance(){
+    public static SharedCoordinates getInstance(){
         if(instance == null){
-            instance = new SharedCoordinatesObject();
+            instance = new SharedCoordinates();
         }
         return instance;
     }
@@ -24,7 +30,7 @@ public class SharedCoordinatesObject {
     /**
      * This Method returns an instance of a Cartesian Coordinate Object.
      * It the object itself is not already stored in the Hashmap it will store the object and will return the new stored object
-     * @param coordinate The Coordinate Object which should be checked if it already exists or not
+     * @param coordinate The Coordinate Object which should be stored if necessary and returned at the end
      * @return
      */
     public CartesianCoordinate getCoordinateInstance(CartesianCoordinate coordinate){
@@ -38,7 +44,7 @@ public class SharedCoordinatesObject {
     /**
      * This Method returns an instance of a Spheric Coordinate Object.
      * It the object itself is not already stored in the Hashmap it will store the object and will return the new stored object
-     * @param coordinate The Coordinate Object which should be checked if it already exists or not
+     * @param coordinate The Coordinate Object which should be stored if necessary and returned at the end
      * @return
      */
     public SphericCoordinate getCoordinateInstance(SphericCoordinate coordinate){

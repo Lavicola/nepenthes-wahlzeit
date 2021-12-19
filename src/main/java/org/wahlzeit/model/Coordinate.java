@@ -37,7 +37,7 @@ public interface Coordinate {
 
     }
 
-    // returns the array index which is used for the sharedCoordinateObject
+    // returns the array index which is used for the sharedCoordinateObject see report for more information
     enum ARRAY_INDEX{
         CARTESIAN(0),
         SPHERIC(1);
@@ -45,6 +45,7 @@ public interface Coordinate {
         ARRAY_INDEX(int i) {
         }
     }
+    // every sublcass needs to implement this in order to get the right index for the shared coordinates.
     int getArrayIndex();
 
 

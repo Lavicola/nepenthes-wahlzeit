@@ -3,7 +3,7 @@ package org.wahlzeit.model;
 public abstract class AbstractCoordinate implements Coordinate {
 
 
-    static SharedCoordinatesObject shared_coordinates = SharedCoordinatesObject.getInstance();
+    static SharedCoordinates shared_coordinates = SharedCoordinates.getInstance();
 
     public final static int PRECISION = 5;
     public final static double EPSILON = Math.pow(10, -PRECISION);

@@ -1,8 +1,7 @@
 package org.wahlzeit.model;
 
 import static java.lang.Double.NaN;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -145,6 +144,15 @@ public class CoordinateTest {
     public void InvalidCartesianCoordinateTest() {
         CartesianCoordinate.getCartesianCoordinate(1, 1, NaN);
         CartesianCoordinate.getCartesianCoordinate(1, 1, 1.0 / 0);
+    }
+
+    //test the isSame Method
+    @Test
+    public void isSameTest() {
+        assertTrue(cartesianCoordinate0.isSame(sphericCoordinates0));
+        assertTrue(sphericCoordinates0.isSame(cartesianCoordinate0));
+        assertTrue(sphericCoordinates1.isSame(sphericCoordinates1));
+        assertFalse(sphericCoordinates1.isSame(sphericCoordinates0));
     }
 
 
