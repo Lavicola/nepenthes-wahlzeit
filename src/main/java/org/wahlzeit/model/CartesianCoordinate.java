@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @PatternInstance(
-        patternName = "value objects",
+        patternName = "value object",
         participants = {
                 "Concrete Object(CartesianCoordinat)",
                 "Concrete Object(SphericCoordinate)"
