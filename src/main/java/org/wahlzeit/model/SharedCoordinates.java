@@ -8,6 +8,13 @@ import java.util.HashMap;
  * It is implemented as a Singleton and used from Cartesian and Spheric in order to  store every created Object in one global Hashmap
  */
 
+@PatternInstance(
+        patternName = "Singeltone",
+        participants = {
+                "Singleton",
+        }
+)
+
 public class SharedCoordinates {
 
     private static SharedCoordinates instance;
@@ -20,7 +27,7 @@ public class SharedCoordinates {
     //don´t allow to create an instance
     private SharedCoordinates(){}
 
-    public static SharedCoordinates getInstance(){
+    public synchronized static SharedCoordinates getInstance(){
         if(instance == null){
             instance = new SharedCoordinates();
         }

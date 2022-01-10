@@ -5,6 +5,7 @@
 
 package org.wahlzeit.services.mailing;
 
+import org.wahlzeit.model.PatternInstance;
 import org.wahlzeit.services.EmailAddress;
 import org.wahlzeit.services.SysLog;
 
@@ -13,6 +14,16 @@ import org.wahlzeit.services.SysLog;
  * This is a decorator pattern application.
  * 
  */
+
+
+@PatternInstance(
+		patternName = "Decorator",
+		participants = {
+				"Component(AbstractEmailService/EmailService)",
+				"Decorator(LoggingEmailService)",
+				"ConcreteComponent(e.g. MockEmailService or SmtpEmailService)"
+		}
+)
 public class LoggingEmailService implements EmailService {
 	
 	/**

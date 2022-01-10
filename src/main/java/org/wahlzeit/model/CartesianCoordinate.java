@@ -4,7 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class CartesianCoordinate extends AbstractCoordinate {
+@PatternInstance(
+        patternName = "value objects",
+        participants = {
+                "Concrete Object(CartesianCoordinat)",
+                "Concrete Object(SphericCoordinate)"
+        }
+)
+
+
+public class  CartesianCoordinate extends AbstractCoordinate {
 
     //immutable since it does not make sense to change the coordiantes later on.
     private final double x;
