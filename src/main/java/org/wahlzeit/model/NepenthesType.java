@@ -41,7 +41,6 @@ public class NepenthesType {
 
 
     public Nepenthes createInstance(int id) {
-
         return new Nepenthes(id, this);
     }
 

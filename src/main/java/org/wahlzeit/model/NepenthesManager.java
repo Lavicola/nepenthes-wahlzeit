@@ -3,19 +3,17 @@ package org.wahlzeit.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.wahlzeit.services.ObjectManager;
 import org.wahlzeit.services.Persistent;
 
 public class NepenthesManager extends ObjectManager{
 
-    //in order to distinguish the objects in the hashmap
+    //in order to distinguish the different Nepenthes objects in the hashmap we use a counter to set the ID of the Nepenthes Object
     public int counter = 0;
-    private static NepenthesManager instance;
-    private HashMap<String,NepenthesType> nepenthesTypes = new HashMap<>();
-    private HashMap<Integer,Nepenthes> nepenthes = new HashMap<>();
+    public static NepenthesManager instance;
+    // just like shown in the UML the Manager keep track of every Nepenthes and NepentheyTyp
+    protected HashMap<String,NepenthesType> nepenthesTypes = new HashMap<>();
+    protected HashMap<Integer,Nepenthes> nepenthes = new HashMap<>();
 
 
     public static NepenthesManager getInstance() {
@@ -29,26 +27,20 @@ public class NepenthesManager extends ObjectManager{
 
     }
 
-
-
-    public void doAddSubType(NepenthesType nepenthesSuperType, NepenthesType nepenthesSubType){
-        nepenthesSuperType.addSubType(nepenthesSubType);
-    }
-
-
-
-
     public void createNepenthesType(String typeName){
-        assert(typeName != null) : "typename is null";
-        assert(nepenthesTypes.containsKey(typeName) == false) : "Type already exists";
+        assert(typeName != null) : "Arguement is null";
+        //if the type already exists we won´t throw an exception since it makes no sense in my opinion
         if(!nepenthesTypes.containsKey(typeName)){
             nepenthesTypes.put(typeName, new NepenthesType(typeName));
         }
     }
 
+    public void doAddSubType(NepenthesType nepenthesSuperType, NepenthesType nepenthesSubType){
+        nepenthesSuperType.addSubType(nepenthesSubType);
+    }
+
     //create empty Nepenthes and later on set the values
     public Nepenthes createNepenthes(String typeName) {
-        assertIsValidNepenthesTypeName(typeName);
         //it fails if the typeName does not exist, the TypeName must be created before
         NepenthesType nepenthesType = getNepenthesType(typeName);
         Nepenthes result = nepenthesType.createInstance(counter++);
@@ -64,11 +56,6 @@ public class NepenthesManager extends ObjectManager{
         return nepenthes;
     }
 
-
-
-
-
-
     public NepenthesType getNepenthesType(String typeName){
         assertIsValidNepenthesTypeName(typeName);
         return nepenthesTypes.get(typeName);
@@ -76,14 +63,13 @@ public class NepenthesManager extends ObjectManager{
 
 
 
-
-
-
-
-
     public void assertIsValidNepenthesTypeName(String typeName){
-        assert(typeName != null) : "typename is null";
-        assert(nepenthesTypes.containsKey(typeName) ) : "Typename does not exist";
+        if(typeName == null){
+            throw new IllegalArgumentException("Arguement is Null");
+        }
+        if(!nepenthesTypes.containsKey(typeName)){
+            throw new IllegalArgumentException("Key does not exists");
+        }
     }
 
     /**

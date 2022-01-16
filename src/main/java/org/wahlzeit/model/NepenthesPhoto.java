@@ -10,13 +10,14 @@ public class NepenthesPhoto extends Photo {
 
 	private Date timeTaken;
 	public NepenthesPhotoManager nepenthesPhotoManager = NepenthesPhotoManager.getInstance();
-	Nepenthes nepenthes = null;
+	protected Nepenthes nepenthes = null;
 
 	/**
 	 * 
 	 */
 	public NepenthesPhoto() {
         super();
+		nepenthesPhotoManager.nepenthesPhotos.add(this);
 	}
 	
 	/**
@@ -61,6 +62,15 @@ public class NepenthesPhoto extends Photo {
 		rset.updateInt("altitude", nepenthes.getAltitude());
 		rset.updateBoolean("isHybrid", nepenthes.isHybrid());
 	}
+
+	public Nepenthes getNepenthes() {
+		return nepenthes;
+	}
+
+	public void setNepenthes(Nepenthes nepenthes) {
+		this.nepenthes = nepenthes;
+	}
+
 
 
 }

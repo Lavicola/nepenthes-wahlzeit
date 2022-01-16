@@ -3,7 +3,7 @@ package org.wahlzeit.model;
 import org.wahlzeit.services.DataObject;
 
 public class Nepenthes {
-
+    //in order for the Manager to be able to distinguish different Nepenthes objects and store these in it´s hashmap we need a ID which will be set in the NepenthesManager
     int id = 0;
     public NepenthesManager nepenthesManager = NepenthesManager.getInstance();
     private NepenthesType nepenthesType;
@@ -30,14 +30,6 @@ public class Nepenthes {
         this.name = name;
         this.altitude = altitude;
         this.isHybrid = isHybrid;
-    }
-
-
-    public void put(PhotoId id,Nepenthes nepenthes){
-
-
-
-
     }
 
     public NepenthesType getType(){
