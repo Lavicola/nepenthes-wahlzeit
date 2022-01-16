@@ -2,13 +2,15 @@ package org.wahlzeit.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
+
 
 public class NepenthesPhoto extends Photo {
 
-    private String name;
-    private int altitude;
-    private boolean isHybrid;
-
+	private Date timeTaken;
+	public NepenthesPhotoManager nepenthesPhotoManager = NepenthesPhotoManager.getInstance();
+	Nepenthes nepenthes = null;
 
 	/**
 	 * 
@@ -46,78 +48,19 @@ public class NepenthesPhoto extends Photo {
     public void readFrom(ResultSet rset) throws SQLException {
 		assertNotNull(rset);
 		super.readFrom(rset);
-        name = rset.getString("name");
-        altitude = rset.getInt("altitude");
-        isHybrid = rset.getBoolean("isHybrid");
+        nepenthes.setName(rset.getString("name"));
+        nepenthes.setAltitude(rset.getInt("altitude"));
+        nepenthes.setHybrid(rset.getBoolean("isHybrid"));
 
 	}
 	
     public void writeOn(ResultSet rset) throws SQLException {
 		assertNotNull(rset);
 		super.writeOn(rset);
-        rset.updateString("name", name);
-		rset.updateInt("altitude", altitude);
-		rset.updateBoolean("isHybrid", isHybrid);
-
+        rset.updateString("name", nepenthes.getName());
+		rset.updateInt("altitude", nepenthes.getAltitude());
+		rset.updateBoolean("isHybrid", nepenthes.isHybrid());
 	}
-	/**
-	 * 
-	 * @methodtype get
-	 */
-    public String getName(){
-        return this.name;
-    }
-
-    /**
-	 * 
-	 * @methodtype get
-	 */
-    public int getAltitude(){
-        return this.altitude;
-    }
-    /**
-	 * 
-	 * @methodtype get
-	 */
-    public boolean isHybrid(){
-        return this.isHybrid;
-    }
-
-	/**
-	 * 
-	 * @methodtype set
-	 */
-    public void setName(String name){
-        this.name=name;
-    }
-    
-	/**
-	 * 
-	 * @methodtype set
-	 */
-    public void setAltitude(int altitude){
-        this.altitude = altitude;
-		assertClassInvariant();
-    }
-
-	/**
-	 * 
-	 * @methodtype set
-	 */
-    public void setisHybrid(boolean isHybrid){
-        this.isHybrid = isHybrid;
-    }
 
 
-	@Override
-	protected void assertClassInvariant(){
-		if(this.altitude < 0){
-			throw new IllegalArgumentException("altitude can´t be zero");
-		}
-		if(this.name.isBlank() || this.name.isEmpty()){
-			throw new IllegalArgumentException("name can´t be empty or blank!");
-		}
-		return;
-	}
-    
 }

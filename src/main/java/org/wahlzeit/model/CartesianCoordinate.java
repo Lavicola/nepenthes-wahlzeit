@@ -15,7 +15,7 @@ import java.util.*;
 
 public class  CartesianCoordinate extends AbstractCoordinate {
 
-    //immutable since it does not make sense to change the coordiantes later on.
+    //immutable since it does not make sense to change the coordinates later on.
     private final double x;
     private final double y;
     private final double z;
