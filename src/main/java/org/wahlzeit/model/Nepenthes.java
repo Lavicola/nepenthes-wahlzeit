@@ -3,34 +3,33 @@ package org.wahlzeit.model;
 import org.wahlzeit.services.DataObject;
 
 public class Nepenthes {
-    //in order for the Manager to be able to distinguish different Nepenthes objects and store these in it´s hashmap we need a ID which will be set in the NepenthesManager
-    int id = 0;
-    public NepenthesManager nepenthesManager = NepenthesManager.getInstance();
-    private NepenthesType nepenthesType;
-    private Location location;
+
     private String name;
     private int altitude;
     private boolean isHybrid;
+    private Location location;
+    public NepenthesManager nepenthesManager = NepenthesManager.getInstance();
+    private NepenthesType nepenthesType;
 
-
-    public Nepenthes(int id, NepenthesType nepenthesType){
-    this.id = id;
+    // since we don´t want to create the same object twice, we use the static Method zu create a new Object or get the reference from the NepenthesManager
+    private Nepenthes(String name, NepenthesType nepenthesType){
+    this.name = name;
     this.nepenthesType = nepenthesType;
+    assertClassInvariant();
     }
 
 
 
-    public int getId(){
-        return this.id;
+    public static Nepenthes getNepenthes(String name, NepenthesType nepenthesType){
+        Nepenthes nepenthes = NepenthesManager.getInstance().getNepenthes(name);
+        if(nepenthes == null){
+            nepenthes = new Nepenthes(name, nepenthesType);
+        }
+        return nepenthes;
     }
 
 
-    public Nepenthes(NepenthesType nepenthesType,String name, int altitude,boolean isHybrid){
-        this.nepenthesType = nepenthesType;
-        this.name = name;
-        this.altitude = altitude;
-        this.isHybrid = isHybrid;
-    }
+
 
     public NepenthesType getType(){
         return nepenthesType;
@@ -66,6 +65,13 @@ public class Nepenthes {
     }
 
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     protected void assertClassInvariant(){
         if(this.altitude < 0){

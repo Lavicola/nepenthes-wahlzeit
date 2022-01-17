@@ -61,18 +61,23 @@ public class NepenthesTypeTest {
         nepenthesManager.createNepenthesType("intermediate");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void createNepenthesWithoutExistingTypeTest(){
-        nepenthesManager.createNepenthes("intermediate");
-    }
-
-
-
     @Test
     public void hasInstanceTest(){
         assertTrue(uhL_nepenthes1.getType().hasInstance(hL_nepenthes1));
         assertTrue(ull_nepenthes1.getType().hasInstance(ll_nepenthes1));
         assertFalse(ll_nepenthes1.getType().hasInstance(ull_nepenthes1));
+        // more complex hierachy: sub sub typ of ultra hochland and subtyp of hochland
+        nepenthesManager.createNepenthesType("intermediate");
+        nepenthesManager.createNepenthesType("other_subtyp");
+        Nepenthes nepenthes = nepenthesManager.createNepenthes("intermediate","vogelii",1000,false);
+        Nepenthes nepenthes1 = nepenthesManager.createNepenthes("other_subtyp","other",1000,false);
+        nepenthesManager.doAddSubType(hL_nepenthes1.getType(),nepenthes.getType());
+        nepenthesManager.doAddSubType(hL_nepenthes1.getType(),nepenthes1.getType());
+        assertTrue(uhL_nepenthes1.getType().hasInstance(nepenthes));
+        assertTrue(uhL_nepenthes1.getType().hasInstance(nepenthes1));
+        assertTrue(hL_nepenthes1.getType().hasInstance(nepenthes));
+
+
     }
 
 

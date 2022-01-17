@@ -8,12 +8,11 @@ import org.wahlzeit.services.Persistent;
 
 public class NepenthesManager extends ObjectManager{
 
-    //in order to distinguish the different Nepenthes objects in the hashmap we use a counter to set the ID of the Nepenthes Object
-    public int counter = 0;
     public static NepenthesManager instance;
     // just like shown in the UML the Manager keep track of every Nepenthes and NepentheyTyp
     protected HashMap<String,NepenthesType> nepenthesTypes = new HashMap<>();
-    protected HashMap<Integer,Nepenthes> nepenthes = new HashMap<>();
+    // every Nepenthes Name is unique and therefore we can use the name as key
+    protected HashMap<String,Nepenthes> nepenthes = new HashMap<>();
 
 
     public static NepenthesManager getInstance() {
@@ -39,17 +38,17 @@ public class NepenthesManager extends ObjectManager{
         nepenthesSuperType.addSubType(nepenthesSubType);
     }
 
-    //create empty Nepenthes and later on set the values
-    public Nepenthes createNepenthes(String typeName) {
+    //create a Nepenthes with the minimum of necessary values
+    public Nepenthes createNepenthes(String typeName, String name) {
         //it fails if the typeName does not exist, the TypeName must be created before
         NepenthesType nepenthesType = getNepenthesType(typeName);
-        Nepenthes result = nepenthesType.createInstance(counter++);
-        nepenthes.put(result.getId(), result);
+        Nepenthes result = nepenthesType.createInstance(name,nepenthesType);
+        nepenthes.put(result.getName(), result);
         return result;
     }
     //for unit testing it is more comfortable to just call one method
     public Nepenthes createNepenthes(String typeName,String name,int altitude,boolean isHybrid) {
-        Nepenthes nepenthes = createNepenthes(typeName);
+        Nepenthes nepenthes = createNepenthes(typeName,name);
         nepenthes.setHybrid(isHybrid);
         nepenthes.setAltitude(altitude);
         nepenthes.setName(name);
@@ -62,6 +61,19 @@ public class NepenthesManager extends ObjectManager{
     }
 
 
+    public Nepenthes getNepenthes(String name){
+        if(nepenthesExists(name)){
+            return nepenthes.get(name);
+        }
+        return null;
+    }
+
+    public boolean nepenthesExists(String name){
+        if(nepenthes.containsKey(name)){
+            return true;
+        }
+        return false;
+    }
 
     public void assertIsValidNepenthesTypeName(String typeName){
         if(typeName == null){

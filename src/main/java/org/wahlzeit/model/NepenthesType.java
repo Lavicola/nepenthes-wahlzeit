@@ -29,10 +29,10 @@ public class NepenthesType {
         return subTypes;
     }
 
-    public void addSubType(NepenthesType ft) {
-        assert (ft != null) : "tried to set null sub-type";
-        ft.setSuperType(this);
-        subTypes.add(ft);
+    public void addSubType(NepenthesType nepenthesType) {
+        assert (nepenthesType != null) : "tried to set null sub-type";
+        nepenthesType.setSuperType(this);
+        subTypes.add(nepenthesType);
     }
 
     private void setSuperType(NepenthesType nepenthesType) {
@@ -40,8 +40,9 @@ public class NepenthesType {
     }
 
 
-    public Nepenthes createInstance(int id) {
-        return new Nepenthes(id, this);
+    public Nepenthes createInstance(String name, NepenthesType nepenthesType) {
+        return Nepenthes.getNepenthes(name, nepenthesType);
+
     }
 
 
