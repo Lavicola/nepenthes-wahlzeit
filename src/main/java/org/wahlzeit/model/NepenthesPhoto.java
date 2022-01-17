@@ -71,6 +71,13 @@ public class NepenthesPhoto extends Photo {
 		this.nepenthes = nepenthes;
 	}
 
+	public Date getTimeTaken() {
+		return timeTaken;
+	}
+
+	public void setTimeTaken(Date timeTaken) {
+		this.timeTaken = timeTaken;
+	}
 
 
 }

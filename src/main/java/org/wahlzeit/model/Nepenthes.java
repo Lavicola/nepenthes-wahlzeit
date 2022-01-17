@@ -11,7 +11,7 @@ public class Nepenthes {
     public NepenthesManager nepenthesManager = NepenthesManager.getInstance();
     private NepenthesType nepenthesType;
 
-    // since we don´t want to create the same object twice, we use the static Method zu create a new Object or get the reference from the NepenthesManager
+    // since we don´t want to create the same object twice, we use the static Method zu create a new Object or get the reference from the NepenthesManager, other values will be set via Setters.
     private Nepenthes(String name, NepenthesType nepenthesType){
     this.name = name;
     this.nepenthesType = nepenthesType;
@@ -19,11 +19,13 @@ public class Nepenthes {
     }
 
 
-
+    // this funcction must be static in order to be able to check if a Nepenthes already exists
     public static Nepenthes getNepenthes(String name, NepenthesType nepenthesType){
         Nepenthes nepenthes = NepenthesManager.getInstance().getNepenthes(name);
+        // Nepenthes does not exist, create it and add it to the manager list
         if(nepenthes == null){
             nepenthes = new Nepenthes(name, nepenthesType);
+            NepenthesManager.getInstance().addNepenthes(nepenthes);
         }
         return nepenthes;
     }

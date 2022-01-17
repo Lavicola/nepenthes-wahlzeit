@@ -60,6 +60,12 @@ public class NepenthesManager extends ObjectManager{
         return nepenthesTypes.get(typeName);
     }
 
+    public void addNepenthes(Nepenthes nepenthes){
+        if(!nepenthesExists(nepenthes.getName())){
+            this.nepenthes.put(nepenthes.getName(), nepenthes);
+        }
+    }
+
 
     public Nepenthes getNepenthes(String name){
         if(nepenthesExists(name)){
