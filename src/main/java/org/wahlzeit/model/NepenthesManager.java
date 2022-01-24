@@ -8,7 +8,7 @@ import org.wahlzeit.services.Persistent;
 
 public class NepenthesManager extends ObjectManager{
 
-    public static NepenthesManager instance;
+    private static NepenthesManager instance;
     // just like shown in the UML the Manager keep track of every Nepenthes and NepentheyTyp
     protected HashMap<String,NepenthesType> nepenthesTypes = new HashMap<>();
     // every Nepenthes Name is unique and therefore we can use the name as key

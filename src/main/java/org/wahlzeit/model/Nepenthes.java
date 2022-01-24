@@ -20,7 +20,7 @@ public class Nepenthes {
 
 
     // this function must be static in order to be able to check if a Nepenthes already exists
-    public static Nepenthes getNepenthes(String name, NepenthesType nepenthesType){
+    public synchronized static Nepenthes getNepenthes(String name, NepenthesType nepenthesType){
         Nepenthes nepenthes = NepenthesManager.getInstance().getNepenthes(name);
         // Nepenthes does not exist, create it and add it to the manager list
         if(nepenthes == null){
