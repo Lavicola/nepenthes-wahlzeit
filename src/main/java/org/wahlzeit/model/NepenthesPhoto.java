@@ -49,16 +49,18 @@ public class NepenthesPhoto extends Photo {
     public void readFrom(ResultSet rset) throws SQLException {
 		assertNotNull(rset);
 		super.readFrom(rset);
-        nepenthes.setName(rset.getString("name"));
-        nepenthes.setAltitude(rset.getInt("altitude"));
-        nepenthes.setHybrid(rset.getBoolean("isHybrid"));
+		if(nepenthes != null){
+			nepenthes.readFrom(rset);
+		}
 
 	}
 	
     public void writeOn(ResultSet rset) throws SQLException {
 		assertNotNull(rset);
 		super.writeOn(rset);
-		nepenthes.writeOn(rset);
+		if(nepenthes != null) {
+			nepenthes.writeOn(rset);
+		}
 	}
 
 	public Nepenthes getNepenthes() {
