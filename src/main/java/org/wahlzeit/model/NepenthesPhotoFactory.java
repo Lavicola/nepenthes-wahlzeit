@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 import org.wahlzeit.services.SysLog;
 
+
+
 public class NepenthesPhotoFactory extends PhotoFactory {
 
     private static NepenthesPhotoFactory instance = null;

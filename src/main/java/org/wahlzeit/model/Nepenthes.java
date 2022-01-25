@@ -2,6 +2,9 @@ package org.wahlzeit.model;
 
 import org.wahlzeit.services.DataObject;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Nepenthes {
 
     private String name;
@@ -31,6 +34,18 @@ public class Nepenthes {
     }
 
 
+
+    public void readFrom(ResultSet rset) throws SQLException {
+        this.setName(rset.getString("name"));
+        this.setAltitude(rset.getInt("altitude"));
+        this.setHybrid(rset.getBoolean("isHybrid"));
+    }
+
+    public void writeOn(ResultSet rset) throws SQLException {
+        rset.updateString("name", this.getName());
+        rset.updateInt("altitude", this.getAltitude());
+        rset.updateBoolean("isHybrid", this.isHybrid());
+    }
 
 
     public NepenthesType getType(){
