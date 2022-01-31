@@ -39,12 +39,18 @@ public class Nepenthes {
         this.setName(rset.getString("name"));
         this.setAltitude(rset.getInt("altitude"));
         this.setHybrid(rset.getBoolean("isHybrid"));
+        if(location != null){
+            this.location.readFrom(rset);
+        }
     }
 
     public void writeOn(ResultSet rset) throws SQLException {
         rset.updateString("name", this.getName());
         rset.updateInt("altitude", this.getAltitude());
         rset.updateBoolean("isHybrid", this.isHybrid());
+        if(location != null){
+            this.writeOn(rset);
+        }
     }
 
 
